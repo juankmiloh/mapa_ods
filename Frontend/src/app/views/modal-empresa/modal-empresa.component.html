@@ -1,0 +1,35 @@
+<div class="example-container">
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <span>Empresas</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>
+<div class="container-fluid" style="padding-top: 1.5em; padding-bottom: 1em; border: 0px solid red;">
+    <form [formGroup]="optionsMap" (ngSubmit)="sendDataParent()">
+        <!-- <div class="d-none d-sm-none d-md-block">Este texto solo visible para escritorio</div>
+        <div class="d-block d-sm-block d-md-none">Este texto solo visible para smartphone</div> -->
+        <div class="row" style="border: 0px solid red; text-align: center;">
+            <div class="col-12" style="border: 0px solid blue;">
+                <mat-progress-bar mode="indeterminate" *ngIf="loadEmpresas" style="width: 30em;"></mat-progress-bar>
+                <mat-form-field style="width: 30em;" *ngIf="!loadEmpresas">
+                    <mat-label>Empresas</mat-label>
+                    <input required matInput placeholder="Empresa" [(ngModel)]="selectEmpresa" aria-label="Empresa" [matAutocomplete]="auto" formControlName="empresa">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let empresa of filteredEmpresas | async" [value]="empresa.nombre">
+                            <small>{{empresa.nombre}}</small>
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint class="text-danger" *ngIf="optionsMap.get('empresa').touched && optionsMap.get('empresa').hasError('required')">* Obligatorio</mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div style="text-align: center; padding-top: 1.5em;">
+            <button type="submit" mat-mini-fab color="accent" class="sticky-top fix-bottom" [hidden]="loadEmpresas">
+                <mat-icon aria-label="Side nav toggle icon">check</mat-icon>
+            </button>
+        </div>
+    </form>
+</div>

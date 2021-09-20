@@ -1,0 +1,92 @@
+.example-container {
+    position: relative;
+    min-height: 250px;
+    overflow: auto;
+}
+
+.example-table-container {
+    position: relative;
+    max-height: 250px;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.mat-dialog-content {
+    overflow: auto;
+}
+
+.example-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.12);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+}
+
+::ng-deep .multiline-tooltip {
+    white-space: pre-line;
+    border: 1px solid #ff9800;
+    font-size: small;
+}
+
+tr.mat-footer-row {
+    font-weight: bold;
+}
+
+.btn-dialog {
+    background-color: white;
+}
+
+.table-class {
+    // border-top: 1px solid #f5f5f5;
+    border-left: 1px solid #f5f5f5;
+    border-right: 1px solid #f5f5f5;
+}
+
+.div-chart {
+    text-align: center;
+    background-color: #1b1e27;
+    height: 327.5px;
+    width: 100%;
+    overflow: hidden;
+    border: 0px solid red;
+}
+
+::ng-deep .ngx-charts {
+    width: 55%;
+    text {
+        fill: #fff!important;
+    }
+}
+
+::ng-deep .legend-title {
+    margin-left: -40px !important;
+    width: 150px;
+}
+
+::ng-deep .legend-title-text {
+    color: white !important;
+    font-size: smaller;
+}
+
+::ng-deep .legend-labels {
+    background: #272932 !important;
+    // max-height: 24em !important;
+    width: 10em !important;
+    margin-top: 1.5em !important;
+    margin-left: -20px !important;
+}

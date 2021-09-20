@@ -1,0 +1,133 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~igniteui-angular/lib/core/styles/themes/index';
+// Uncomment the following lines if you want to add a custom palette:
+// $primary: #731963 !default;
+// $secondary: #ce5712 !default;
+// $app-palette: igx-palette($primary, $secondary);
+
+/* autoprefixer grid: on */
+
+@include igx-core();
+@include igx-theme($default-palette);
+// CSS Reset, comment out if not required or using a different module
+@import '~minireset.css/minireset';
+
+/* You can add global styles to this file, and also import other style files */
+
+@import '~@angular/material/theming';
+@include mat-core();
+$my-app-primary: mat-palette($mat-indigo);
+$my-app-accent: mat-palette($mat-pink, 500, 900, A100);
+$my-app-warn: mat-palette($mat-grey, 900, 900, 900);
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
+@include angular-material-theme($my-app-theme);
+.alternate-theme {
+    $alternate-primary: mat-palette($mat-light-blue);
+    $alternate-accent: mat-palette($mat-yellow, 400);
+    $alternate-theme: mat-light-theme($alternate-primary, $alternate-accent);
+    @include angular-material-theme($alternate-theme);
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* Pantallas superiores a 800px (PC) */
+@media screen and (min-width: 800px) {
+    .mat-datepicker-content-touch {
+        height: 40vh !important;
+    }
+}
+
+/* Pantallas inferiores a 800px (mobile) */
+@media screen and (max-width: 800px) {
+    .mat-datepicker-content-touch {
+        height: 25vh !important;
+    }
+}
+
+// CSS para que el bottom-sheet ocupe todo el ancho de la pantalla
+.mat-bottom-sheet-container {
+    min-width: 100vw !important;
+    padding: 0px !important;
+}
+
+mat-calendar-header {
+    display: none;
+}
+
+mat-datepicker-content {
+    overflow: hidden !important;
+}
+
+// CSS para el cuadro Legend pantalla web
+.juank-theme .esri-legend--card {
+    height: 8em;
+    width: 15em;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+// CSS para el cuadro Legend pantalla dispositivo movil
+.juank-theme .esri-legend--stacked {
+    height: 10em;
+    min-width: 3em;
+}
+
+// // CSS propiedad para poner encima el popup sobre el boton flotante
+// .juank-theme .esri-ui {
+//     position: static;
+// }
+
+// CSS para popup
+.juank-theme .esri-popup__header {
+    background: #e3f2fd;
+}
+
+.juank-theme .esri-popup__feature-menu-title {
+    background: #e3f2fd;
+}
+
+.juank-theme .esri-popup__header-container--button :hover {
+    background: #e3f2fd;
+}
+
+// CSS para ocultar el mensaje inicial de 'No hay leyenda'
+.juank-theme .esri-legend--card__message {
+    visibility: hidden;
+}
+
+// CSS para mostrar el mensaje 'Cargando...'
+.juank-theme .esri-legend--card__message::before {
+    visibility: visible;
+    content: 'Cargando...';
+}
+
+// CSS para modificar valores del texto del legend
+.juank-theme .esri-legend--card__service-caption-text {
+    font-size: smaller;
+    border: 0px solid;
+    width: 180px;
+    text-align: center;
+    // padding-top: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+// CSS para cambiar propiedades de la caja del texto del legend
+.juank-theme .esri-legend--card__service-caption-container {
+    height: 55px;
+}
+
+// .mat-dialog-container {
+//     overflow: hidden !important;
+// }

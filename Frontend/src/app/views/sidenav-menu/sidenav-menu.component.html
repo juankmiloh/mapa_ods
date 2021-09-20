@@ -1,0 +1,51 @@
+<mat-sidenav-container class="sidenav-container" [hasBackdrop]="false">
+    <mat-sidenav #sidenav mode="side" class="sidenav" (keydown.escape)="close('na')" disableClose opened="true">
+        <!-- Content nav lateral -->
+        <mat-toolbar>
+            <div>
+                <img src="../assets/img/logo_sm.jpg" class='imgSmRedonda'>
+            </div>
+            <label style="padding-left: 6%;"><span style="color: #303F9F;">Superservicios - ODS</span></label>
+        </mat-toolbar>
+        <mat-selection-list #items [multiple]="false">
+            <span *ngFor="let option of options">
+                <span *ngIf="option.name === 'divider'">
+                    <mat-divider></mat-divider>
+                </span>
+                <span *ngIf="option.name === 'subheader'">
+                    <div mat-subheader>{{ option.header }}</div>
+                </span>
+                <span *ngIf="option.name !== 'divider' && option.name !== 'subheader'">
+                    <mat-list-option [value]="option" (click)="openDialog(option)">
+                        <mat-icon mat-list-icon>{{ option.icon }}</mat-icon>
+                        <div class="row">
+                            <div [class]="option.select ? 'col-4' : 'col-12'">
+                                <span style="padding-left: 3%;">{{ option.name }}</span>
+                            </div>
+                            <div class="col-8" *ngIf="option.select" style="text-align: right;">
+                                <div style="color: white; background: #f44336; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%;">
+                                    <span>{{ option.select }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-list-option>
+                </span>
+            </span>
+        </mat-selection-list>
+        <!-- <p>
+        Option selected: {{items.selectedOptions.selected[0]?.value.name}}
+        </p> -->
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <!-- icono de hamburguesa que permite la función del menu lateral -->
+            <button  type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sidenav.toggle()">
+				<mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+            <span style="padding-left: 1%;">{{ opcion }}</span>
+        </mat-toolbar>
+        <!-- Add Content Here -->
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

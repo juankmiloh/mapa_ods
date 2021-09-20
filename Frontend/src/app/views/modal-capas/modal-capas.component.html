@@ -1,0 +1,26 @@
+<div class="example-container">
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <span>Capas</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>
+<div class="container-fluid" style="padding-top: 1em; padding-bottom: 1em; border: 0px solid red;">
+    <mat-divider></mat-divider>
+    <mat-selection-list #shoes style="width: 35em;">
+        <mat-list-option *ngFor="let shoe of typesOfShoes">
+            {{shoe}}
+        </mat-list-option>
+    </mat-selection-list>
+
+    <!-- <p>
+        Options selected: {{shoes.selectedOptions.selected.length}}
+    </p> -->
+    <mat-divider></mat-divider>
+
+    <div style="text-align: center; padding-top: 1em;">
+        <button type="submit" mat-mini-fab color="accent">
+            <mat-icon aria-label="Side nav toggle icon">check</mat-icon>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+.sidenav-container {
+    height: 100%;
+}
+
+.sidenav {
+    width: 23em;
+}
+
+.sidenav .mat-toolbar {
+    background: white;
+    color: gray;
+}
+
+.mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.imgSmRedonda {
+    width: 30px;
+    height: 40px;
+    border-radius: 160px;
+    // border: 1px solid #666;
+}
+
+.sidenav-container .mat-toolbar.mat-primary {
+    background: #6495ed;
+}
+
+.example-container {
+    width: 500px;
+    height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.example-sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.example-sidenav {
+    padding: 20px;
+}

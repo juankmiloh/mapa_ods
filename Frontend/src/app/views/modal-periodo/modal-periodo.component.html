@@ -1,0 +1,44 @@
+<div class="example-container">
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <span>Período</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>
+<div class="container-fluid" style="padding-top: 1.5em; padding-bottom: 1em; border: 0px solid red;">
+    <form [formGroup]="optionsMap" (ngSubmit)="sendDataParent()">
+        <!-- <div class="d-none d-sm-none d-md-block">Este texto solo visible para escritorio</div>
+        <div class="d-block d-sm-block d-md-none">Este texto solo visible para smartphone</div> -->
+        <div class="row" style="border: 0px solid red; text-align: center;">
+            <div class="col-sm-12 col-md-5">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Año</mat-label>
+                    <mat-select required [(ngModel)]="selectAnio" formControlName="anio" (selectionChange)="somethingChanged(selectAnio)">
+                        <mat-option *ngFor="let anio of suiAnios" [value]="anio.anio">
+                            {{anio.anio}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-hint class="text-danger" *ngIf="optionsMap.get('anio').touched && optionsMap.get('anio').hasError('required')">* Obligatorio</mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-7" style="border: 0px solid blue;">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Mes</mat-label>
+                    <input required matInput [value]="startDate" [matDatepicker]="dp" formControlName="mes" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #dp [disabled]="optionsMap.get('anio').hasError('required')" startView="year" [startAt]="startDate" (yearSelected)="chosenYearHandler($event)" (monthSelected)="chosenMonthHandler($event, dp)">
+                    </mat-datepicker>
+                    <mat-hint class="text-danger" *ngIf="optionsMap.get('mes').touched && optionsMap.get('mes').hasError('required') && dp.disabled">* Seleccione un año</mat-hint>
+                    <mat-hint class="text-danger" *ngIf="(optionsMap.get('mes').touched && optionsMap.get('mes').hasError('required') && !dp.disabled)">* Obligatorio</mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div style="text-align: center; padding-top: 1.5em;">
+            <button type="submit" mat-mini-fab color="accent" class="sticky-top fix-bottom" [disabled]="!optionsMap.valid">
+                <mat-icon aria-label="Side nav toggle icon">check</mat-icon>
+            </button>
+        </div>
+    </form>
+</div>
