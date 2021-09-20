@@ -10,7 +10,7 @@ export const MY_FORMATS = {
 
 export const LIST_SIDENAV = [
     {
-        name: 'divider'
+        name: 'divider',
     },
     {
         name: 'subheader',
@@ -19,24 +19,24 @@ export const LIST_SIDENAV = [
     {
         name: 'Servicio',
         icon: 'support_agent',
-        select: 'Energía'
+        select: '',
     },
     {
         name: 'Período',
         icon: 'event',
-        select: 'Septiembre - 2020'
+        select: '',
     },
     {
         name: 'Capas',
         icon: 'layers',
-        select: 'Calidad del servicio'
+        select: '',
     },
     {
         name: 'Empresa',
         icon: 'corporate_fare',
     },
     {
-        name: 'divider'
+        name: 'divider',
     },
     {
         name: 'subheader',
@@ -51,17 +51,17 @@ export const LIST_SIDENAV = [
         icon: 'assessment',
     },
     {
-        name: 'divider'
+        name: 'divider',
     },
     {
         name: 'Usuarios',
         icon: 'people_alt',
     },
     {
-        name: 'divider'
+        name: 'divider',
     },
     {
         name: 'Acerca de SSPD - ODS',
         icon: 'help_outline',
-    }
+    },
 ];

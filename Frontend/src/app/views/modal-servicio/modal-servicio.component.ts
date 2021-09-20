@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal-servicio',
@@ -14,9 +15,15 @@ export class ModalServicioComponent implements OnInit {
   radius: number;
   color: string;
 
-  constructor() { }
+  constructor(
+    private dialogRef: MatDialogRef<ModalServicioComponent>,
+  ) { }
 
   ngOnInit(): void {
   }
 
+  setServicio(servicio) {
+    const data = {modal: 'servicio', value: servicio};
+    this.dialogRef.close(data);
+  }
 }

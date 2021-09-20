@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import * as moment from 'moment';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { IEmpresa, ISUIError } from 'src/app/models/IOptionsMapa.model';
@@ -10,18 +10,19 @@ import { SuiService } from 'src/app/services/sui.service';
 @Component({
   selector: 'app-modal-empresa',
   templateUrl: './modal-empresa.component.html',
-  styleUrls: ['./modal-empresa.component.scss']
+  styleUrls: ['./modal-empresa.component.scss'],
 })
 export class ModalEmpresaComponent implements OnInit {
 
-  selectEmpresa: string;
+  selectEmpresa: any;
   public suiEmpresas: any[] = [];
   loadEmpresas = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private suiService: SuiService,
-    public observer: AppObservableService
+    public observer: AppObservableService,
+    private dialogRef: MatDialogRef<ModalEmpresaComponent>,
   ) {
     this.filteredEmpresas = this.optionsMap.get('empresa').valueChanges
       .pipe(
@@ -29,12 +30,12 @@ export class ModalEmpresaComponent implements OnInit {
         map(state => state ? this._filterStates(state) : this.suiEmpresas.slice()),
       );
   }
-  
+
   optionsMap = this.formBuilder.group({
-    empresa: [null, Validators.required]
+    empresa: [null, Validators.required],
   });
   filteredEmpresas: Observable<IEmpresa[]>;
-  
+
   ngOnInit(): void {
     this.loadEmpresas = true;
     this.loadSuiEmpresas();
@@ -42,7 +43,7 @@ export class ModalEmpresaComponent implements OnInit {
 
   // Se hace llamado al servicio para cargar empresas
   loadSuiEmpresas() {
-    this.suiService.getEmpresas().subscribe( empresas => {
+    this.suiService.getEmpresas().subscribe(empresas => {
       this.suiEmpresas = empresas;
       this.suiEmpresas.unshift({
         cod_empresa: 0,
@@ -68,13 +69,10 @@ export class ModalEmpresaComponent implements OnInit {
 
   // enviar valores al padre
   sendDataParent() {
-    console.log('object');
+    const codEmpresa = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).cod_empresa;
+    const servicio = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).servicio;
+    const model = {cod_empresa: codEmpresa, nombre: this.selectEmpresa, servicio };
+    const data = { modal: 'empresa', value: model };
+    this.dialogRef.close(data);
   }
-
-  // se ejecuta cuando se cambien valores del año
-  somethingChanged(select: any): void {
-    // const mesActual = this.optionsMap.get('mes').value.format('M') - 1;
-    // this.startDate = new Date(select, mesActual, 1); // Actualizar año y mes seleccionado en el modal de meses
-  }
-
 }

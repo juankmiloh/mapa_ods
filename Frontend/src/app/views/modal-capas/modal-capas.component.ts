@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-modal-capas',
@@ -6,12 +8,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./modal-capas.component.scss']
 })
 export class ModalCapasComponent implements OnInit {
+  @ViewChild('layers') listLayers: MatSelectionList;
 
-  typesOfShoes: string[] = ['Consumos', 'Calidad del servicio', 'Estratificación'];
+  selectedLayers: string[]; // this array will contain the selected layers
+  typesOfLayers: string[] = ['Consumos', 'Calidad del servicio', 'Estratificación'];
 
-  constructor() { }
+  constructor(
+    private dialogRef: MatDialogRef<ModalCapasComponent>,
+  ) { }
 
   ngOnInit(): void {
+    const loadData = JSON.parse(localStorage.getItem('capas'));
+    this.selectedLayers = loadData;
+  }
+
+  selectLayers() {
+    // console.log('selectedLayers -> ', this.listLayers._value);
+    const options = this.listLayers._value;
+    const data = {modal: 'capas', value: options};
+    this.dialogRef.close(data);
   }
 
 }

@@ -25,19 +25,22 @@ export class SidenavMenuComponent {
 
   @ViewChild('items') listSidenav: MatSelectionList;
 
-  // opcion = 'Objetivos de desarrollo sostenible';
-  opcion = 'CODENSA S.A ESP';
+  empresa = 'OBJETIVOS DE DESARROLLO SOSTENIBLE';
 
   ngOnInit() {
     this.x = window.matchMedia('(max-width: 800px)'); // Si hace match con dispositivos móviles
     // this.listSidenav.deselectAll();
+    localStorage.removeItem('servicio');
+    localStorage.removeItem('periodo');
+    localStorage.removeItem('capas');
+    localStorage.removeItem('empresa');
   }
 
   close(reason: string) {}
 
   // mostrar modal
   openDialog(option): void {
-    console.log('Abrir modal --> ', option);
+    // console.log('Abrir modal --> ', option);
     let modal: any
     if (option.name === 'Servicio') {
       modal = ModalServicioComponent
@@ -60,6 +63,27 @@ export class SidenavMenuComponent {
       // height: this.x.matches ? '100%' : '',
       disableClose: false,
       data: {},
+    });
+
+    // Acciones luego de cerrar el modal
+    dialogRef.afterClosed().subscribe((dataFromModal) => {
+      console.log('The dialog was closed', dataFromModal);
+      if (dataFromModal.modal === 'servicio') {
+        this.options[2].select = dataFromModal.value;
+        localStorage.setItem('servicio', JSON.stringify(dataFromModal.value));
+      } else if (dataFromModal.modal === 'periodo') {
+        this.options[3].select = dataFromModal.value.label;
+        localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
+        this.listSidenav.deselectAll();
+      } else if (dataFromModal.modal === 'empresa') {
+        this.empresa = dataFromModal.value.nombre;
+        localStorage.setItem('empresa', JSON.stringify(dataFromModal.value));
+      } else if (dataFromModal.modal === 'capas') {
+        this.options[4].select = dataFromModal.value[0];
+        localStorage.setItem('capas', JSON.stringify(dataFromModal.value));
+      } else {
+        return;
+      }
     });
   }
 

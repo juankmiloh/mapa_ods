@@ -10,9 +10,9 @@
         <!-- <div class="d-none d-sm-none d-md-block">Este texto solo visible para escritorio</div>
         <div class="d-block d-sm-block d-md-none">Este texto solo visible para smartphone</div> -->
         <div class="row" style="border: 0px solid red; text-align: center;">
-            <div class="col-12" style="border: 0px solid blue;">
-                <mat-progress-bar mode="indeterminate" *ngIf="loadEmpresas" style="width: 30em;"></mat-progress-bar>
-                <mat-form-field style="width: 30em;" *ngIf="!loadEmpresas">
+            <div class="col-12 select-empresa">
+                <mat-progress-bar mode="indeterminate" *ngIf="loadEmpresas" style="width: 100%;"></mat-progress-bar>
+                <mat-form-field style="width: 100%;" *ngIf="!loadEmpresas">
                     <mat-label>Empresas</mat-label>
                     <input required matInput placeholder="Empresa" [(ngModel)]="selectEmpresa" aria-label="Empresa" [matAutocomplete]="auto" formControlName="empresa">
                     <mat-autocomplete #auto="matAutocomplete">

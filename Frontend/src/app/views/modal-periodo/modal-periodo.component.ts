@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { MatDialogRef } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { MY_FORMATS } from 'src/app/constants/constants';
@@ -27,7 +28,7 @@ import { SuiService } from 'src/app/services/sui.service';
 export class ModalPeriodoComponent implements OnInit {
 
   selectAnio: number;
-  selectMes: number;
+  selectMes: number = null;
   suiAnios: any[] = null;
   date = new FormControl(moment());
   startDate: Date;
@@ -35,7 +36,8 @@ export class ModalPeriodoComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private suiService: SuiService,
-    public observer: AppObservableService
+    public observer: AppObservableService,
+    private dialogRef: MatDialogRef<ModalPeriodoComponent>,
   ) { }
 
   optionsMap = this.formBuilder.group({
@@ -45,21 +47,40 @@ export class ModalPeriodoComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSuiAnios();
-    const ctrlDate = this.date.value;
-    ctrlDate.month(this.selectMes);
-    this.optionsMap.get('mes').setValue(ctrlDate);
+    const loadData = JSON.parse(localStorage.getItem('periodo'));
+    if (loadData) {
+      // console.log('loadData -> ', loadData);
+      this.selectAnio = loadData.anio;
+      this.optionsMap.get('mes').setValue(moment(loadData.mes));
+      const mes = this.optionsMap.get('mes').value.format('M') - 1;
+      this.startDate = new Date(loadData.anio, mes, 1); // Actualizar año y mes seleccionado en el modal de meses
+    } else {
+      const fecha = new Date();
+      this.selectAnio = fecha.getFullYear();
+      const ctrlDate = this.date.value;
+      ctrlDate.month(this.selectMes);
+      this.optionsMap.get('mes').setValue(ctrlDate);
+    }
   }
 
   // enviar valores al padre
   sendDataParent() {
-    console.log('object');
+    this.optionsMap.value['label'] = this.convertDateLabel(`${moment(this.optionsMap.value['mes']).locale('es').format('MMMM')} - ${this.optionsMap.value['anio']}`);
+    this.optionsMap.value['mes'] = moment(this.optionsMap.value['mes']).locale('es').format('M');
+    const data = {modal: 'periodo', value: this.optionsMap.value};
+    this.dialogRef.close(data);
+  }
+
+  convertDateLabel(fecha) {
+    const label = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+    return label;
   }
 
   // Se hace llamado al servicio para cargar años
   loadSuiAnios() {
     this.suiService.getAnios().subscribe( anios => {
       this.suiAnios = anios;
-      console.log(this.suiAnios);
+      // console.log(this.suiAnios);
     }, (error: ISUIError) => {
       // console.log(error);
       this.observer.setShowAlertErrorSUI(error.status);

@@ -1,0 +1,13 @@
+/* Pantallas superiores a 800px (PC) */
+@media screen and (min-width: 800px) {
+    .select-empresa {
+        width: 25vw !important;
+    }
+}
+
+/* Pantallas inferiores a 800px (mobile) */
+@media screen and (max-width: 800px) {
+    .select-empresa {
+        width: 100em !important;
+    }
+}
