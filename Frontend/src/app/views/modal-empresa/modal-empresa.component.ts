@@ -52,6 +52,12 @@ export class ModalEmpresaComponent implements OnInit {
       });
       this.selectEmpresa = 'TODAS';
       this.loadEmpresas = false;
+      // Se cargan los datos si ya habido una empresa seleccionada
+      const loadData = JSON.parse(localStorage.getItem('empresa'));
+      if (loadData) {
+        this.selectEmpresa = loadData.nombre;
+        console.log(this.selectEmpresa);
+      }
     }, (error: ISUIError) => {
       this.observer.setShowAlertErrorSUI(error.status);
     });
