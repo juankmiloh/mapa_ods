@@ -91,6 +91,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   AlertErrorSUI: number;
 
   async ngOnInit() {
+    this.validateChangeBasemap();
     // VAlidar conexion SUI
     this.validateConnectionSUI();
     await this.verifyConnectionSUI().then((data: any) => {
@@ -130,6 +131,20 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     //   data: { view: this.view, fabOptions: this.fabOptions },
     // });
     // this.openDialog();
+  }
+
+  validateChangeBasemap() {
+    this.observer.getChangeBasemap().subscribe((status) => {
+      // console.log('Status observable basemap --> ', status);
+      const basemap = this.view.map.basemap.id;
+      if (status === 'oscuro' && basemap === 'streets-night-vector') {
+        this.view.map.basemap = 'streets-navigation-vector'; // Cambiar el baseMap a Claro
+        this.openSnackBar(`Modo claro activado`, null);
+      } else {
+        this.view.map.basemap = 'streets-night-vector'; // Cambiar el baseMap a Oscuro
+        this.openSnackBar(`Modo oscuro activado`, null);
+      }
+    });
   }
 
   // observable para validar si hay error en la conexion con la BD SUI

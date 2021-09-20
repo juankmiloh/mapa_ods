@@ -44,7 +44,7 @@ export const LIST_SIDENAV = [
     },
     {
         name: 'Modo oscuro',
-        icon: 'light_mode',
+        icon: 'nightlight_round',
     },
     {
         name: 'Estadísticas',

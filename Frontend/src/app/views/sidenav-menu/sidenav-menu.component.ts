@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSelectionList } from '@angular/material/list';
 import { LIST_SIDENAV } from 'src/app/constants/constants';
 import { Section } from 'src/app/models/IOptionsMapa.model';
+import { AppObservableService } from 'src/app/services/app-observable.service';
 import { ModalCapasComponent } from '../modal-capas/modal-capas.component';
 import { ModalEmpresaComponent } from '../modal-empresa/modal-empresa.component';
 import { ModalPeriodoComponent } from '../modal-periodo/modal-periodo.component';
@@ -21,6 +22,7 @@ export class SidenavMenuComponent {
 
   constructor(
     public dialog: MatDialog,
+    public observer: AppObservableService,
   ) {}
 
   @ViewChild('items') listSidenav: MatSelectionList;
@@ -54,37 +56,54 @@ export class SidenavMenuComponent {
     } else if (option.name === 'Capas') {
       modal = ModalCapasComponent
       this.listSidenav.deselectAll();
+    } else if (option.name === 'Modo oscuro') {
+      this.options[8].name = 'Modo claro';
+      this.options[8].icon = 'light_mode';
+      this.listSidenav.deselectAll();
+      this.observer.setChangeBasemap('claro');
+    } else if (option.name === 'Modo claro') {
+      this.options[8].name = 'Modo oscuro';
+      this.options[8].icon = 'nightlight_round';
+      this.listSidenav.deselectAll();
+      this.observer.setChangeBasemap('oscuro');
     } else {
       return;
     }
-    const dialogRef = this.dialog.open(modal, {
-      closeOnNavigation: true,
-      maxWidth: this.x.matches ? '90%' : '60%',
-      // height: this.x.matches ? '100%' : '',
-      disableClose: false,
-      data: {},
-    });
 
-    // Acciones luego de cerrar el modal
-    dialogRef.afterClosed().subscribe((dataFromModal) => {
-      console.log('The dialog was closed', dataFromModal);
-      if (dataFromModal.modal === 'servicio') {
-        this.options[2].select = dataFromModal.value;
-        localStorage.setItem('servicio', JSON.stringify(dataFromModal.value));
-      } else if (dataFromModal.modal === 'periodo') {
-        this.options[3].select = dataFromModal.value.label;
-        localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
-        this.listSidenav.deselectAll();
-      } else if (dataFromModal.modal === 'empresa') {
-        this.empresa = dataFromModal.value.nombre;
-        localStorage.setItem('empresa', JSON.stringify(dataFromModal.value));
-      } else if (dataFromModal.modal === 'capas') {
-        this.options[4].select = dataFromModal.value[0];
-        localStorage.setItem('capas', JSON.stringify(dataFromModal.value));
-      } else {
-        return;
-      }
-    });
+    // Si la opcion seleccionada abre algun modal
+    if (modal) {
+      const dialogRef = this.dialog.open(modal, {
+        closeOnNavigation: true,
+        maxWidth: this.x.matches ? '90%' : '60%',
+        // height: this.x.matches ? '100%' : '',
+        disableClose: false,
+        data: {},
+      });
+
+      // Acciones luego de cerrar el modal
+      dialogRef.afterClosed().subscribe((dataFromModal) => {
+        console.log('The dialog was closed', dataFromModal);
+        if (dataFromModal) {
+          if (dataFromModal.modal === 'servicio') {
+            this.options[2].select = dataFromModal.value;
+            localStorage.setItem('servicio', JSON.stringify(dataFromModal.value));
+          } else if (dataFromModal.modal === 'periodo') {
+            this.options[3].select = dataFromModal.value.label;
+            localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
+            this.listSidenav.deselectAll();
+          } else if (dataFromModal.modal === 'empresa') {
+            this.empresa = dataFromModal.value.nombre;
+            localStorage.setItem('empresa', JSON.stringify(dataFromModal.value));
+          } else if (dataFromModal.modal === 'capas') {
+            this.options[4].select = dataFromModal.value[0];
+            localStorage.setItem('capas', JSON.stringify(dataFromModal.value));
+          } else {
+            return;
+          }
+        }
+      });
+    }
+
   }
 
 }

@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 export class AppObservableService {
 
   private showAlertErrorSUI = new Subject<any>();
+  private changeBasemap = new Subject<any>();
 
   constructor() {}
 
@@ -16,5 +17,13 @@ export class AppObservableService {
 
   getShowAlertErrorSUI(): Observable<any>  {
     return this.showAlertErrorSUI.asObservable();
+  }
+
+  setChangeBasemap(status: string) {
+    this.changeBasemap.next(status);
+  }
+
+  getChangeBasemap(): Observable<any>  {
+    return this.changeBasemap.asObservable();
   }
 }

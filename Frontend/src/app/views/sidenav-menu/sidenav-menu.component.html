@@ -1,4 +1,5 @@
-<mat-sidenav-container class="sidenav-container" [hasBackdrop]="false">
+<!-- Se limita la vista para que no permita arrastar ni copiar texto -->
+<mat-sidenav-container class="sidenav-container" [hasBackdrop]="false" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
     <mat-sidenav #sidenav mode="side" class="sidenav" (keydown.escape)="close('na')" disableClose opened="true">
         <!-- Content nav lateral -->
         <mat-toolbar>
