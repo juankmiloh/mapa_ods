@@ -44,7 +44,8 @@
             <button  type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sidenav.toggle()">
 				<mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
-            <span style="padding-left: 1%;">{{ empresa }}</span>
+            <span *ngIf="empresa === 'OBJETIVOS DE DESARROLLO SOSTENIBLE'" style="padding-left: 1%;">{{ empresa }}</span>
+            <span *ngIf="empresa !== 'OBJETIVOS DE DESARROLLO SOSTENIBLE'" style="color: black; background: #fff9c4; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%;">{{ empresa }}</span>
         </mat-toolbar>
         <!-- Add Content Here -->
         <router-outlet></router-outlet>

@@ -4,6 +4,10 @@
 
 export const environment = {
   production: false,
+  // server dev
+  serverUrl: 'http://172.16.32.13:5055',
+  // server produccion
+  // serverUrl: 'http://172.16.32.13:5055',
 };
 
 /*

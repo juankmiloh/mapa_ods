@@ -8,6 +8,8 @@ export class AppObservableService {
 
   private showAlertErrorSUI = new Subject<any>();
   private changeBasemap = new Subject<any>();
+  private changePeriodo = new Subject<any>();
+  private changeEmpresa = new Subject<any>();
 
   constructor() {}
 
@@ -25,5 +27,21 @@ export class AppObservableService {
 
   getChangeBasemap(): Observable<any>  {
     return this.changeBasemap.asObservable();
+  }
+
+  setChangePeriodo(status: string) {
+    this.changePeriodo.next(status);
+  }
+
+  getChangePeriodo(): Observable<any>  {
+    return this.changePeriodo.asObservable();
+  }
+
+  setChangeEmpresa(status: string) {
+    this.changeEmpresa.next(status);
+  }
+
+  getChangeEmpresa(): Observable<any>  {
+    return this.changeEmpresa.asObservable();
   }
 }

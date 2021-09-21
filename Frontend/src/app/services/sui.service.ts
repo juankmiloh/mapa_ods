@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap} from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -11,11 +12,7 @@ export class SuiService {
 
   constructor(public http: HttpClient) { }
 
-  // serverUrl = 'http://192.168.2.15:5055';
-  // serverUrl = 'http://localhost:5055';
-  serverUrl = 'http://172.16.32.13:5055/'; // PC SSPD
-  // serverUrl = 'http://172.16.2.43:5055/'; // Servidor pruebas OTIC
-
+  serverUrl = environment.serverUrl;
 
   verifyConnectionSUI() {
     return new Promise((resolve, reject) => {

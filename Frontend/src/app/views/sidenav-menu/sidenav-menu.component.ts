@@ -88,10 +88,12 @@ export class SidenavMenuComponent {
             this.options[2].select = dataFromModal.value;
             localStorage.setItem('servicio', JSON.stringify(dataFromModal.value));
           } else if (dataFromModal.modal === 'periodo') {
+            this.observer.setChangePeriodo(dataFromModal.value);
             this.options[3].select = dataFromModal.value.label;
             localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
             this.listSidenav.deselectAll();
           } else if (dataFromModal.modal === 'empresa') {
+            this.observer.setChangeEmpresa(dataFromModal.value);
             this.empresa = dataFromModal.value.nombre;
             localStorage.setItem('empresa', JSON.stringify(dataFromModal.value));
           } else if (dataFromModal.modal === 'capas') {
