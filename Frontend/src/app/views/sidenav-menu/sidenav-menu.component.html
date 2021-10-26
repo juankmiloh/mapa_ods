@@ -17,7 +17,7 @@
                     <div mat-subheader>{{ option.header }}</div>
                 </span>
                 <span *ngIf="option.name !== 'divider' && option.name !== 'subheader'">
-                    <mat-list-option [value]="option" (click)="openDialog(option)">
+                    <mat-list-option [value]="option" (click)="openDialog(option)" [hidden]=option.hidden>
                         <mat-icon mat-list-icon>{{ option.icon }}</mat-icon>
                         <div class="row">
                             <div [class]="option.select ? 'col-4' : 'col-12'">

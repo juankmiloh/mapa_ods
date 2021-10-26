@@ -16,7 +16,7 @@ export class SuiService {
 
   verifyConnectionSUI() {
     return new Promise((resolve, reject) => {
-      this.http.get<any[]>(`${this.serverUrl}/i_anios`).toPromise().then(res => {
+      this.http.get<any[]>(`${this.serverUrl}/anios`).toPromise().then(res => {
         resolve(res);
       }, (error) => {
         resolve(error);
@@ -25,45 +25,19 @@ export class SuiService {
   }
 
   getAnios(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.serverUrl}/i_anios`).pipe(
+    return this.http.get<any[]>(`${this.serverUrl}/anios`).pipe(
       tap((data) => {
         // console.log(data);
       }), catchError(this.handleError),
       );
   }
 
-  getCausas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.serverUrl}/i_causas`).pipe(
-      tap((data) => {
-        // console.log('Carga causas exitosa!');
-      }), catchError(this.handleError),
-    );
-  }
-
-  getCausaId(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.serverUrl}/i_causas/${id}`).pipe(
-      tap((data) => {
-        // console.log(JSON.stringify(data));
-      }), catchError(this.handleError),
-    );
-  }
-
-  getEmpresas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.serverUrl}/i_empresas`).pipe(
+  getEmpresasServicio(servicio: number) {
+    return this.http.get<any[]>(`${this.serverUrl}/empresas?servicio=${servicio}`).pipe(
       tap((data) => {
         // console.log('Carga empresas exitosa!');
       }), catchError(this.handleError),
     );
-  }
-
-  getEmpresasId(id: number) {
-    return new Promise((resolve, reject) => {
-      this.http.get<any[]>(`${this.serverUrl}/i_empresas/${id}`).toPromise().then(res => {
-        resolve(res);
-      }, (error) => {
-        catchError(this.handleError);
-      });
-    });
   }
 
   // Capturamos el estado del error y el mensaje

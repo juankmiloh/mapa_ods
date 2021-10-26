@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // server dev
-  serverUrl: 'http://172.16.32.13:5055',
+  serverUrl: 'http://localhost:5000/ods/api',
   // server produccion
   // serverUrl: 'http://172.16.32.13:5055',
 };

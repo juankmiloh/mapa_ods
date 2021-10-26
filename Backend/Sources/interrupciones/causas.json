@@ -1,7 +1,0 @@
-{
-    "name": "causas",
-    "query": [
-        "SELECT * FROM JHERRERAA.CAUSAS_INTERR ",
-        "WHERE (COD_CAUSA = :CAUSA_ARG OR 0 = :CAUSA_ARG)"
-    ]
-}

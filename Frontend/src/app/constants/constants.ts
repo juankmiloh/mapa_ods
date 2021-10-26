@@ -18,8 +18,13 @@ export const LIST_SIDENAV = [
     },
     {
         name: 'Servicio',
-        icon: 'support_agent',
+        icon: 'roofing',
         select: '',
+    },
+    {
+        name: 'Empresa',
+        icon: 'corporate_fare',
+        hidden: true,
     },
     {
         name: 'Período',
@@ -27,13 +32,9 @@ export const LIST_SIDENAV = [
         select: '',
     },
     {
-        name: 'Capas',
+        name: 'Capa',
         icon: 'layers',
         select: '',
-    },
-    {
-        name: 'Empresa',
-        icon: 'corporate_fare',
     },
     {
         name: 'divider',

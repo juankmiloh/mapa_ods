@@ -53,7 +53,7 @@ export class SidenavMenuComponent {
     } else if (option.name === 'Empresa') {
       modal = ModalEmpresaComponent
       this.listSidenav.deselectAll();
-    } else if (option.name === 'Capas') {
+    } else if (option.name === 'Capa') {
       modal = ModalCapasComponent
       this.listSidenav.deselectAll();
     } else if (option.name === 'Modo oscuro') {
@@ -85,19 +85,20 @@ export class SidenavMenuComponent {
         console.log('The dialog was closed', dataFromModal);
         if (dataFromModal) {
           if (dataFromModal.modal === 'servicio') {
-            this.options[2].select = dataFromModal.value;
+            this.options[2].select = dataFromModal.value['servicio'];
+            this.options[3]['hidden'] = false;
             localStorage.setItem('servicio', JSON.stringify(dataFromModal.value));
-          } else if (dataFromModal.modal === 'periodo') {
-            this.observer.setChangePeriodo(dataFromModal.value);
-            this.options[3].select = dataFromModal.value.label;
-            localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
-            this.listSidenav.deselectAll();
           } else if (dataFromModal.modal === 'empresa') {
             this.observer.setChangeEmpresa(dataFromModal.value);
             this.empresa = dataFromModal.value.nombre;
             localStorage.setItem('empresa', JSON.stringify(dataFromModal.value));
+          } else if (dataFromModal.modal === 'periodo') {
+            this.observer.setChangePeriodo(dataFromModal.value);
+            this.options[4].select = dataFromModal.value.label;
+            localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
+            this.listSidenav.deselectAll();
           } else if (dataFromModal.modal === 'capas') {
-            this.options[4].select = dataFromModal.value[0];
+            this.options[5].select = dataFromModal.value[0];
             localStorage.setItem('capas', JSON.stringify(dataFromModal.value));
           } else {
             return;

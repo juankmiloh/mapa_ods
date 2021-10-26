@@ -13,3 +13,4 @@
 *.local
 .venv
 venv
+src/assets

@@ -50,9 +50,6 @@ import { SidenavMenuComponent } from './views/sidenav-menu/sidenav-menu.componen
 import { HomeComponent } from './views/home/home.component';
 import { MapInterrupcionComponent } from './views/map-interrupcion/map-interrupcion.component';
 import { MapOptionsComponent } from './views/map-interrupcion/map-options/map-options.component';
-import { MapPqrsComponent } from './views/map-pqrs/map-pqrs.component';
-import { TarifaritoComponent } from './views/tarifarito/tarifarito.component';
-import { ProcesosDiegComponent } from './views/procesos-dieg/procesos-dieg.component';
 import { MapStatisticsComponent } from './views/map-interrupcion/map-statistics/map-statistics.component';
 import { MapGraphicsComponent } from './views/map-interrupcion/map-graphics/map-graphics.component';
 import { ModalServicioComponent } from './views/modal-servicio/modal-servicio.component';
@@ -67,9 +64,6 @@ import { ModalCapasComponent } from './views/modal-capas/modal-capas.component';
     HomeComponent,
     MapInterrupcionComponent,
     MapOptionsComponent,
-    MapPqrsComponent,
-    TarifaritoComponent,
-    ProcesosDiegComponent,
     MapStatisticsComponent,
     MapGraphicsComponent,
     ModalServicioComponent,
@@ -125,7 +119,7 @@ import { ModalCapasComponent } from './views/modal-capas/modal-capas.component';
     NgxChartsModule,
     MatRippleModule,
     MatCheckboxModule,
-    MatBadgeModule
+    MatBadgeModule,
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'} },

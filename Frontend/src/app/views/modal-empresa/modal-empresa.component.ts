@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -17,6 +18,7 @@ export class ModalEmpresaComponent implements OnInit {
   selectEmpresa: any;
   public suiEmpresas: any[] = [];
   loadEmpresas = false;
+  servicio: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,25 +40,31 @@ export class ModalEmpresaComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmpresas = true;
-    this.loadSuiEmpresas();
+    const servicio = JSON.parse(localStorage.getItem('servicio'));
+    this.loadSuiEmpresas(servicio);
   }
 
   // Se hace llamado al servicio para cargar empresas
-  loadSuiEmpresas() {
-    this.suiService.getEmpresas().subscribe(empresas => {
+  loadSuiEmpresas(servicio) {
+    this.suiService.getEmpresasServicio(servicio['cod_servicio']).subscribe(empresas => {
       this.suiEmpresas = empresas;
+      // console.log(this.suiEmpresas);
       this.suiEmpresas.unshift({
-        cod_empresa: 0,
+        id_empresa: 0,
         nombre: 'TODAS',
-        servicio: 'ENERGIA',
+        sigla: 'TODAS',
+        nit: 0,
+        cod_servicio: servicio['cod_servicio'],
+        servicio: servicio['servicio'],
       });
       this.selectEmpresa = 'TODAS';
       this.loadEmpresas = false;
       // Se cargan los datos si ya habido una empresa seleccionada
       const loadData = JSON.parse(localStorage.getItem('empresa'));
       if (loadData) {
+        if (loadData.cod_servicio === servicio.cod_servicio) // Si la empresa seleccionada es del mismo servicio que esta seleccionado
         this.selectEmpresa = loadData.nombre;
-        console.log(this.selectEmpresa);
+        // console.log(this.selectEmpresa);
       }
     }, (error: ISUIError) => {
       this.observer.setShowAlertErrorSUI(error.status);
@@ -75,9 +83,10 @@ export class ModalEmpresaComponent implements OnInit {
 
   // enviar valores al padre
   sendDataParent() {
-    const codEmpresa = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).cod_empresa;
-    const servicio = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).servicio;
-    const model = {cod_empresa: codEmpresa, nombre: this.selectEmpresa, servicio };
+    const idEmpresa = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).id_empresa;
+    const codServicio = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).cod_servicio;
+    const nombreServicio = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).servicio;
+    const model = {id_empresa: idEmpresa, nombre: this.selectEmpresa, cod_servicio: codServicio, servicio: nombreServicio };
     const data = { modal: 'empresa', value: model };
     this.dialogRef.close(data);
   }

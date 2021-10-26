@@ -42,7 +42,7 @@ export class ModalPeriodoComponent implements OnInit {
 
   optionsMap = this.formBuilder.group({
     anio: [null, Validators.required],
-    mes: null
+    mes: null,
   });
 
   ngOnInit(): void {
