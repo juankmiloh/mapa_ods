@@ -10,7 +10,7 @@
         <!-- <div class="d-none d-sm-none d-md-block">Este texto solo visible para escritorio</div>
         <div class="d-block d-sm-block d-md-none">Este texto solo visible para smartphone</div> -->
         <div class="row" style="border: 0px solid red; text-align: center;">
-            <div class="col-12 select-empresa">
+            <div class="col-12 select-style">
                 <mat-progress-bar mode="indeterminate" *ngIf="loadEmpresas" style="width: 100%;"></mat-progress-bar>
                 <mat-form-field style="width: 100%;" *ngIf="!loadEmpresas">
                     <mat-label>Empresas</mat-label>
@@ -23,8 +23,43 @@
                     <mat-hint class="text-danger" *ngIf="optionsMap.get('empresa').touched && optionsMap.get('empresa').hasError('required')">* Obligatorio</mat-hint>
                 </mat-form-field>
             </div>
+            <div class="select-style" [class]="selectDpto != '' ? 'col-4' : 'col-12'">
+                <mat-form-field style="width: 100%;" *ngIf="!loadEmpresas && !loadSuiDpto">
+                    <mat-label>Departamentos</mat-label>
+                    <input matInput placeholder="Departamento" [(ngModel)]="selectDpto" aria-label="Departamento" [matAutocomplete]="auto" formControlName="departamento">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='setOptionDpto($event.option.value)'>
+                        <mat-option *ngFor="let departamento of filteredDepartamentos | async" [value]="departamento.nombre">
+                            <small>{{departamento.nombre}}</small>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="select-style" [class]="selectMpio === '' || selectMpio === 'TODOS' ? 'col-8' : 'col-4'">
+                <mat-progress-bar mode="indeterminate" *ngIf="selectDpto != '' && loadSuiMpio" style="width: 100%;"></mat-progress-bar>
+                <mat-form-field style="width: 100%;" *ngIf="selectDpto != '' && !loadSuiMpio">
+                    <mat-label>Municipios</mat-label>
+                    <input matInput placeholder="Municipio" [(ngModel)]="selectMpio" aria-label="Departamento" [matAutocomplete]="auto" formControlName="municipio">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='setOptionMpio($event.option.value)'>
+                        <mat-option *ngFor="let municipio of filteredMunicipios | async" [value]="municipio.nombre">
+                            <small>{{municipio.nombre}}</small>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="select-style col-4">
+                <mat-progress-bar mode="indeterminate" *ngIf="selectMpio != 'TODOS' && selectMpio != '' && loadSuiCpoblado" style="width: 100%;"></mat-progress-bar>
+                <mat-form-field style="width: 100%;" *ngIf="selectDpto != '' && selectMpio != 'TODOS' && selectMpio != '' && !loadSuiCpoblado">
+                    <mat-label>Centro poblado</mat-label>
+                    <input matInput placeholder="Centro poblado" [(ngModel)]="selectCpoblado" aria-label="Departamento" [matAutocomplete]="auto" formControlName="cpoblado">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='setOptionCpoblado($event.option.value)'>
+                        <mat-option *ngFor="let cpoblado of filteredCpoblados | async" [value]="cpoblado.nombre">
+                            <small>{{cpoblado.nombre}}</small>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
         </div>
-        <mat-divider></mat-divider>
+        <mat-divider *ngIf="!loadEmpresas"></mat-divider>
 
         <div style="text-align: center; padding-top: 1.5em;">
             <button type="submit" mat-mini-fab color="accent" class="sticky-top fix-bottom" [hidden]="loadEmpresas">

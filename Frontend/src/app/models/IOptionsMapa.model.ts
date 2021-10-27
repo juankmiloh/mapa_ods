@@ -1,15 +1,14 @@
 export interface IOptionsMapa {
-  ano: number;
-  mes: number;
-  empresa: number;
-  nombEmpresa?: string;
-  causa: number;
-  colSui?: string;
-  nombCausa?: string;
-  zoom: number;
-  latitud: number;
-  longitud: number;
-  total?: number;
+  zoom?: number;
+  latitud?: number;
+  longitud?: number;
+  ano?: number;
+  mes?: number;
+  empresa?: number;
+  sector?: number;
+  dpto?: number;
+  mpio?: number;
+  cpoblado?: number;
 }
 
 export interface IDialogData {

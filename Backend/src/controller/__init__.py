@@ -11,7 +11,7 @@ empresa_controller, \
 procesos_controller, \
 servicios_controller, \
 usuarios_controller, \
-estados_controller, \
+divipola_controller, \
 tiposancion_controller, \
 anios_controller, \
 causal_controller, \

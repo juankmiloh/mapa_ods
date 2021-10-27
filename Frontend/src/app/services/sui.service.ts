@@ -40,6 +40,14 @@ export class SuiService {
     );
   }
 
+  getDivipola(param: any) {
+    return this.http.get<any[]>(`${this.serverUrl}/divipola?optiondpto=${param.optiondpto}&optionmpio=${param.optionmpio}&optioncpoblado=${param.optioncpoblado}&dpto=${param.dpto}&mpio=${param.mpio}&cpoblado=${param.cpoblado}`).pipe(
+      tap((data) => {
+        // console.log('Carga empresas exitosa!');
+      }), catchError(this.handleError),
+    );
+  }
+
   // Capturamos el estado del error y el mensaje
   private handleError(err: HttpErrorResponse) {
     const error = {

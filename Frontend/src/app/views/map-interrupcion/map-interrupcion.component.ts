@@ -16,9 +16,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./map-interrupcion.component.scss'],
 })
 export class MapInterrupcionComponent implements OnInit, OnDestroy {
-  periodo = null;
-  empresa = null;
-  legend: any;
+  depto: any;
+  mpio: any;
+  cpoblado: any;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -32,6 +32,9 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
 
   public view: any;
   serverUrl = environment.serverUrl;
+  periodo = null;
+  empresa = null;
+  legend: any;
   errorMessage = '';
   // Controla el CSS del Backdrop
   fbbackMap = 'fbback_map_hide';
@@ -47,15 +50,17 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   // opciones del progress de carga
   mode: ProgressSpinnerMode = 'determinate';
-  value = 50;
 
   async ngOnInit() {
     this.validateChangePeriodo();
     this.validateChangeBasemap();
     this.validateChangeEmpresa();
+    this.validateChangeDepto();
+    this.validateChangeMpio();
+    this.validateChangeCpoblado();
     // Validar conexion SUI
     await this.verifyConnectionSUI().then((data: any) => {
-      // console.log('estado servidor: ', data);
+      console.log('estado servidor: ', data);
       if (data.status !== undefined) {
         this.observer.setShowAlertErrorSUI(data.status);
       }
@@ -64,22 +69,16 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
 
     // Initialize MapView and return an instance of MapView
     const fecha = new Date();
-    const anoActual = fecha.getFullYear() - 1;
+    // const anoActual = fecha.getFullYear() - 2;
+    const anoActual = 2019;
     // const mesActual = fecha.getMonth(); // Trae el mes anterior al actual
     const mesActual = 3; // prueba
     // console.log('MES ACTUAL: ', mesActual);
     // opciones iniciales del mapa a visualizar
     this.options = {
-      ano: anoActual,
-      mes: mesActual,
-      empresa: 2249,
-      nombEmpresa: 'Todas las empresas',
-      causa: 0,
-      colSui: 'Todas',
-      nombCausa: 'Todas',
-      zoom: 4,
-      latitud: 2.5,
-      longitud: -73.47106040285713,
+      zoom: 5,
+      latitud: 3.5,
+      longitud: -71.47106040285713,
     };
 
     await this.initializeMap(this.options).then(mapView => {});
@@ -97,14 +96,16 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           icon: 'error',
           // showCancelButton: true,
           // cancelButtonColor: '#e91e63',
-          confirmButtonText: 'Contactar al administrador',
+          // confirmButtonText: 'Contactar al administrador',
+          confirmButtonText: 'Intentar conexión',
           confirmButtonColor: '#3f51b5',
           allowOutsideClick: false,
         };
 
         this.alertSwal.fire().then((data) => {
           if (data.value) {
-            window.location.href = 'https://wa.link/2zk6io';
+            // window.location.href = 'https://wa.link/2zk6io';
+            window.location.reload();
           }
         });
       }
@@ -153,22 +154,19 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       console.log('Status observable periodo --> ', this.empresa);
       this.periodo = status;
       if (this.empresa !== null) {
-        const options = {
+        const options: IOptionsMapa = {
           ano: status.anio,
           mes: status.mes,
           empresa: this.empresa,
-          nombEmpresa: 'Todas las empresas',
-          causa: 0,
-          colSui: 'Todas',
-          nombCausa: 'Todas',
-          zoom: 4,
-          latitud: 2.5,
-          longitud: -73.47106040285713,
+          dpto: this.depto,
+          mpio: this.mpio,
+          cpoblado: this.cpoblado,
         };
         this.addLayer(options).then((data) => {
           this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
         });
       } else {
+        this.openSnackBar('Seleccione una empresa.', null);
         // this.alertSwal.swalOptions = {
         //   title: 'Info',
         //   text: 'Seleccione una empresa',
@@ -183,25 +181,22 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   // Observable que permite controlar el cambio de empresa (año | mes)
   validateChangeEmpresa() {
     this.observer.getChangeEmpresa().subscribe((status) => {
-      console.log('Status observable empresa --> ', this.periodo);
-      this.empresa = status.cod_empresa;
+      console.log('Status observable empresa --> ', status);
+      this.empresa = status.id_empresa;
       if (this.periodo) {
-        const options = {
+        const options: IOptionsMapa = {
           ano: this.periodo.anio,
           mes: this.periodo.mes,
-          empresa: status.cod_empresa,
-          nombEmpresa: 'Todas las empresas',
-          causa: 0,
-          colSui: 'Todas',
-          nombCausa: 'Todas',
-          zoom: 4,
-          latitud: 2.5,
-          longitud: -73.47106040285713,
+          empresa: this.empresa,
+          dpto: this.depto,
+          mpio: this.mpio,
+          cpoblado: this.cpoblado,
         };
         this.addLayer(options).then((data) => {
           this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
         });
       } else {
+        this.openSnackBar('Seleccione un período.', null);
         // this.alertSwal.swalOptions = {
         //   title: 'Info',
         //   text: 'Seleccione un período',
@@ -210,6 +205,31 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
         // };
         // this.alertSwal.fire();
       }
+      console.log('juan camilo depto --> ', this.depto);
+    });
+  }
+
+  // Observable que permite controlar el cambio de departamento
+  validateChangeDepto() {
+    this.observer.getChangeDepto().subscribe((status) => {
+      console.log('Status observable departamento --> ', status.cod);
+      this.depto = status.cod;
+    });
+  }
+
+  // Observable que permite controlar el cambio de municipio
+  validateChangeMpio() {
+    this.observer.getChangeMpio().subscribe((status) => {
+      console.log('Status observable municipio --> ', status.cod);
+      this.mpio = status.cod;
+    });
+  }
+
+  // Observable que permite controlar el cambio de centro poblado
+  validateChangeCpoblado() {
+    this.observer.getChangeCpoblado().subscribe((status) => {
+      console.log('Status observable centro poblado --> ', status.cod);
+      this.cpoblado = status.cod;
     });
   }
 
@@ -325,7 +345,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     }
   }
 
-  async addLayer(options) {
+  async addLayer(options: IOptionsMapa) {
     // console.log('OPTIONS: ', options);
     this.updateLayerCSV = true;
     this.legend.style = { type: 'card', layout: 'side-by-side' }; // CSS leyenda tipo card
@@ -333,8 +353,9 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     this.view.ui.add(this.legend, { position: 'bottom-left' });  // Muestra las convenciones del mapa
 
     const [CSVLayer] = await loadModules(['esri/layers/CSVLayer']);
-    const urlOptions = `${this.serverUrl}/i_interrupcion/${options.ano}/${options.mes}/${options.empresa}/${options.causa}`;
-    // const urlOptions = 'assets/file_interrupciones1.csv';
+    // tslint:disable-next-line: max-line-length
+    // const urlOptions = `${this.serverUrl}/interrupciones?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    const urlOptions = `${this.serverUrl}/interrupciones?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=2&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
     console.log(urlOptions);
     this.dataCSV = d3.csv(urlOptions);
 
@@ -343,7 +364,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       console.log('DATA CSV -> ', data);
       if (data.length === 0) {
         this.alertSwal.swalOptions = {
-          text: 'No hay interupciones para este período.',
+          text: 'No hay información para este período.',
           icon: 'info',
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#ffa726',
@@ -366,13 +387,12 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       const template = {
         // tslint:disable-next-line: max-line-length
         title:  '<div style="border: 0px solid black; background: #e3f2fd; width: 15em; border-radius: 5px; height: 4em; padding-top: 0.3em;">' +
-                '  <small style="color: #3f51b5;"><b>{centro_poblado}</b></small><br>' +
-                '  <small style="color: #212121; padding-left: 3%;">Horas de interrupción {total}</small>' +
+                '  <small style="color: #3f51b5; font-size: x-small;"><b>{nom_empresa}</b></small><br>' +
+                '  <small style="color: #212121; padding-left: 3%;">Consumo {consumo}kwh</small>' +
                 '</div>',
         content: '<div>' +
-                 ' <small>Código DANE municipio {cod_dane}</small><br>' +
-                 ` <small><u>{nom_empresa}</u> código {cod_empresa}</small><br>` +
-                 ` <small>Interrupciones <u>${options.nombCausa.toUpperCase()}</u> para <u>${this.meses[options.mes].toUpperCase()}</u> de <u>${options.ano}</u></small>` +
+                 ' <small>{dane_nom_dpto} - {dane_nom_mpio} - {dane_nom_poblad}</small><br>' +
+                 ' <small>Código DANE centro poblado {cod_dane}</small><br>' +
                  '</div>',
       };
 
@@ -382,7 +402,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       // from the continuous color ramp in the colorStops property
       const renderer = {
         type: 'heatmap',
-        field: `total`,
+        field: `consumo_mod`,
         colorStops: [
           { color: 'rgba(63, 40, 102, 0)', ratio: 0 }, // rango de 0 a 1
           { color: '#6300df', ratio: 0.083 },          // Azul claro
@@ -402,8 +422,8 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
 
       const layer = new CSVLayer({
         url: urlOptions,
-        title: `Interrupciones ${options.colSui} ${this.meses[options.mes]} de ${options.ano}`,
-        // title: `Mapa ODS`,
+        // title: `Interrupciones ${options.colSui} ${this.meses[options.mes]} de ${options.ano}`,
+        title: `Intensidad de consumo`,
         copyright: 'DESARROLLADO POR JUAN CAMILO HERRERA - SUPERSERVICIOS',
         popupTemplate: template,
         renderer,

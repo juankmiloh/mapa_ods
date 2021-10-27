@@ -22,19 +22,20 @@ export const LIST_SIDENAV = [
         select: '',
     },
     {
-        name: 'Empresa',
-        icon: 'corporate_fare',
-        hidden: true,
+        name: 'Capa',
+        icon: 'layers',
+        select: '',
     },
     {
         name: 'Período',
         icon: 'event',
         select: '',
+        hidden: true,
     },
     {
-        name: 'Capa',
-        icon: 'layers',
-        select: '',
+        name: 'Empresa',
+        icon: 'corporate_fare',
+        hidden: false,
     },
     {
         name: 'divider',
@@ -50,10 +51,11 @@ export const LIST_SIDENAV = [
     {
         name: 'Estadísticas',
         icon: 'assessment',
+        hidden: true,
     },
-    {
-        name: 'divider',
-    },
+    // {
+    //     name: 'divider',
+    // },
     {
         name: 'Usuarios',
         icon: 'people_alt',

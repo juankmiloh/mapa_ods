@@ -5,124 +5,102 @@ class InterrupcionesRepository:
     def __init__(self, db):
         self.db = db
 
-    def get_interrupciones_bd(self, anio, mes, empresa, causa):
+    def get_interrupciones_bd(self, anio, mes, empresa, sector, dpto, mpio, cpoblado):
         sql = '''
-            SELECT CONVERT(EMPRESA.ARE_ESP_NOMBRE, 'US7ASCII', 'EE8MSWIN1250'),
-                INTERR.* 
-            FROM 
-            (
+            SELECT 
+                T.CAR_CARG_ANO,
+                T.CAR_CARG_PERIODO,
+                T.COD_DANE,
+                T.ID_COMER,
+                CONVERT(ESP.ARE_ESP_NOMBRE, 'US7ASCII', 'EE8MSWIN1250') ARE_ESP_NOMBRE,
+                T.RES_NORES, --USO
+                GIS.DANE_NOM_DPTO,
+                GIS.DANE_NOM_MPIO,
+                GIS.DANE_NOM_POBLAD,
+                GIS.LONGITUD,
+                GIS.LATITUD,
+                T.CONSUMO CONSUMO,
+                T.FACXCON FACXCON
+            FROM(--cXm(F2)
                 SELECT 
-                    CONVERT(CP.NOMBRE_CENTRO_POBLADO, 'US7ASCII', 'EE8MSWIN1250'),
-                    CP.LONGITUD,
-                    CP.LATITUD,
-                    TO_CHAR(DANE_INTER.COD_DANE),
-                    DANE_INTER.IDENTIFICADOR_EMPRESA,
-                    DANE_INTER.CAR_CARG_ANO,
-                    DANE_INTER.CAR_CARG_MES,
-                    ROUND(DANE_INTER.PNEXC/60,2),
-                    ROUND(DANE_INTER.NPNEXC/60,2),
-                    ROUND(DANE_INTER.REMER/60,2),
-                    ROUND(DANE_INTER.STNSTR/60,2),
-                    ROUND(DANE_INTER.SEGCIU/60,2),
-                    ROUND(DANE_INTER.FNIVEL1/60,2),
-                    ROUND(DANE_INTER.CASTNAT/60,2),
-                    ROUND(DANE_INTER.TERR/60,2),
-                    ROUND(DANE_INTER.CALZESP/60,2),
-                    ROUND(DANE_INTER.TSUBEST/60,2),
-                    ROUND(DANE_INTER.INFRA/60,2),
-                    ROUND(DANE_INTER.SUMI/60,2),
-                    ROUND(DANE_INTER.PEXP/60,2),
-                    DANE_INTER.TOTAL_INTER 
-                FROM 
-                (
-                    SELECT 
-                        INTER.*,
-                        ROUND((PNEXC+NPNEXC+REMER+STNSTR+SEGCIU+FNIVEL1+CASTNAT+TERR+CALZESP+TSUBEST+INFRA+SUMI+PEXP)/60,2) AS TOTAL_INTER 
-                    FROM 
-                    (
-                        SELECT 
-                            TRAFODANE.COD_DANE,
-                            F5.IDENTIFICADOR_EMPRESA,
-                            F5.CAR_CARG_ANO,
-                            F5.CAR_CARG_MES,
-                            CASE WHEN (:PNEXC_ARG = 16) THEN SUM(F5.CAR_T442_MIN_PBEXC) ELSE 0 END AS PNEXC,
-                            CASE WHEN (:NPNEXC_ARG = 18) THEN SUM(F5.CAR_T442_MIN_NPNEXC) ELSE 0 END AS NPNEXC,
-                            CASE WHEN (:REMER_ARG = 20) THEN SUM(F5.CAR_T442_MIN_REMER) ELSE 0 END AS REMER,
-                            CASE WHEN (:STNSTR_ARG = 22) THEN SUM(F5.CAR_T442_MIN_STNSTR) ELSE 0 END AS STNSTR,
-                            CASE WHEN (:SEGCIU_ARG = 24) THEN SUM(F5.CAR_T442_MIN_SEG_CIU) ELSE 0 END AS SEGCIU,
-                            CASE WHEN (:FNIVEL1_ARG = 26) THEN SUM(F5.CAR_T442_MIN_FNIVEL1) ELSE 0 END AS FNIVEL1,
-                            CASE WHEN (:CASTNAT_ARG = 28) THEN SUM(F5.CAR_T442_MIN_CASTNAT) ELSE 0 END AS CASTNAT,
-                            CASE WHEN (:TERR_ARG = 30) THEN SUM(F5.CAR_T442_MIN_TERR) ELSE 0 END AS TERR,
-                            CASE WHEN (:CALZESP_ARG = 32) THEN SUM(F5.CAR_T442_MIN_CAL_ZESP) ELSE 0 END AS CALZESP,
-                            CASE WHEN (:TSUBEST_ARG = 34) THEN SUM(F5.CAR_T442_MIN_TSUBEST) ELSE 0 END AS TSUBEST,
-                            CASE WHEN (:INFRA_ARG = 36) THEN SUM(F5.CAR_T442_MIN_INFRA) ELSE 0 END AS INFRA,
-                            CASE WHEN (:SUMI_ARG = 38) THEN SUM(F5.CAR_T442_MIN_SUMI) ELSE 0 END AS SUMI,
-                            CASE WHEN (:PEXP_ARG = 40) THEN SUM(F5.CAR_T442_MIN_EXP) ELSE 0 END AS PEXP 
-                        FROM 
-                        (
-                            SELECT 
-                                * 
-                            FROM 
-                                CARG_COMERCIAL_E.CAR_T442_FORMATO5 
-                            WHERE 
-                                CAR_CARG_ANO = :ANIO_ARG
-                                AND (IDENTIFICADOR_EMPRESA = :EMPRESA_ARG OR 0 = :EMPRESA_ARG)
-                                AND (CAR_CARG_MES = :MES_ARG)
-                        ) F5,
-                        (SELECT * FROM TRAFO_DANE) TRAFODANE 
-                        WHERE 
-                            F5.CAR_T442_COD_TRANS = TRAFODANE.COD_TRAFO
-                            AND F5.IDENTIFICADOR_EMPRESA = TRAFODANE.IDENTIFICADOR_EMPRESA 
-                        GROUP BY 
-                            TRAFODANE.COD_DANE,
-                            F5.IDENTIFICADOR_EMPRESA,
-                            F5.CAR_CARG_ANO,
-                            F5.CAR_CARG_MES
-                    ) INTER 
-                    WHERE PNEXC+NPNEXC+REMER+STNSTR+SEGCIU+FNIVEL1+CASTNAT+TERR+CALZESP+TSUBEST+INFRA+SUMI+PEXP > 0
-                ) DANE_INTER,
-                (SELECT * FROM JHERRERAA.GIS_CENTRO_POBLADO) CP 
-                WHERE DANE_INTER.COD_DANE = CP.CODIGO_CENTRO_POBLADO
-            )INTERR,
-            (
-                SELECT * FROM 
-                (
-                    SELECT DISTINCT EMP.ARE_ESP_SECUE,
-                        EMP.ARE_ESP_NOMBRE,
-                        'ENERGIA' SERVICIO 
-                    FROM 
-                        RUPS.ARE_ESP_EMPRESAS EMP,
-                        RUPS.ARE_SEES_SERESP ROM,
-                        RUPS.ARE_NESP_NATESP NES,
-                        RUPS.ARE_ACES_ACTESP ACT 
-                    WHERE 
-                        ROM.ARE_ESP_SECUE = EMP.ARE_ESP_SECUE
-                        AND ROM.ARE_ESP_SECUE = NES.ARE_ESP_SECUE
-                        AND ROM.ARE_ESP_SECUE = ACT.ARE_ESP_SECUE
-                        AND EMP.ARE_ESP_SECUE < 99900
-                        AND ROM.ARE_SEES_ESTADO = 'O'
-                        AND NES.ARE_NESP_ESTADO = 'O'
-                        AND ACT.ARE_ACES_ESTADO = 'O'
-                        AND EMP.ARE_ESP_ACTUALIZA IS NOT NULL
-                        AND EMP.ARE_ESP_ESTACT = 'A'
-                        AND EMP.ARE_ESP_SECUE_CREG <> 0 
-                    GROUP BY 
-                            EMP.ARE_ESP_SECUE,
-                            EMP.ARE_ESP_NOMBRE,
-                            EMP.ARE_ESP_ACTUALIZA,
-                            EMP.ARE_ESP_ESTACT,
-                            EMP.ARE_ESP_SECUE_CREG,
-                            'ENERGIA' 
-                    UNION 
-                    SELECT ARE_ESP_SECUE,
-                        ARE_ESP_NOMBRE,
-                        'ENERGIA' SERVICIO 
-                    FROM 
-                        RUPS.ARE_ESP_EMPRESAS
-                    WHERE ARE_ESP_SECUE = 44278
-                )
-            )EMPRESA 
-            WHERE IDENTIFICADOR_EMPRESA = ARE_ESP_SECUE
+                F2.CAR_CARG_ANO, F2.CAR_CARG_MES AS CAR_CARG_PERIODO,
+                F2.IDENTIFICADOR_EMPRESA AS ID_COMER,
+                1 RES_NORES, --USO
+                F2.CAR_T439_DANE AS COD_DANE,
+                SUM(CASE WHEN F2.CAR_T439_TIPO='I' THEN F2.CAR_T439_CONSUMO ELSE 0 END) CONSUMO,
+                SUM(F2.CAR_T439_FACT_CONS) + SUM(F2.CAR_T439_VALOR_RECFAC) FACXCON
+                FROM CARG_COMERCIAL_E.CAR_T439_FORMATO2 F2
+                WHERE
+                F2.IDENTIFICADOR_EMPRESA < 99800
+                AND F2.CAR_CARG_ANO = :ANIO_ARG --ANIO (REMPLAZAR EL 2021 POR LA VARIABLE DEL FRONT)
+                AND F2.CAR_CARG_MES = :MES_ARG --MES (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                AND (F2.IDENTIFICADOR_EMPRESA = :EMPRESA_ARG OR 0 = :EMPRESA_ARG) -- (REMPLAZAR EL 2103 POR LA VARIABLE DEL FRONT)
+                AND 1 = :SECTOR_ARG --FILTRO RESIDENCIAL (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                AND (SUBSTR(F2.CAR_T439_DANE,1,2)=LPAD(:DPTO_ARG,2,'0') OR 'TODOS' = :DPTO_ARG) --CODDEPTO (REMPLAZAR EL 8 POR LA VARIABLE DEL FRONT)
+                AND (SUBSTR(F2.CAR_T439_DANE,3,3)=LPAD(:MPO_ARG,3,'0') OR 'TODOS' = :MPO_ARG) --CODMPIO (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                AND (SUBSTR(F2.CAR_T439_DANE,6,3)=LPAD(:CPOBLADO_ARG,3,'0') OR 'TODOS' = :CPOBLADO_ARG) --CODCPOBLADO (REMPLAZAR EL 0 POR LA VARIABLE DEL FRONT)
+                GROUP BY F2.CAR_CARG_ANO, F2.CAR_CARG_MES, F2.IDENTIFICADOR_EMPRESA, 1, F2.CAR_T439_DANE
+            UNION
+            --CXM (F3)
+                SELECT F3.CAR_CARG_ANO, F3.CAR_CARG_MES AS CAR_CARG_PERIODO, F3.IDENTIFICADOR_EMPRESA AS ID_COMER,
+                2 RES_NORES, --USO,
+                F3.CAR_T440_DANE AS COD_DANE,
+                SUM(CASE WHEN F3.CAR_T440_TIPO_FACT='I' THEN F3.CAR_T440_CONSUMO ELSE 0 END) CONSUMO,
+                SUM(F3.CAR_T440_FACT_CONS) + SUM(F3.CAR_T440_VALOR_RECFAC) FACXCON
+                FROM CARG_COMERCIAL_E.CAR_T440_FORMATO3 F3
+                WHERE
+                F3.IDENTIFICADOR_EMPRESA < 99800
+                AND F3.CAR_CARG_ANO = :ANIO_ARG --ANIO (REMPLAZAR EL 2021 POR LA VARIABLE DEL FRONT)
+                AND F3.CAR_CARG_MES = :MES_ARG --MES (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                AND (F3.IDENTIFICADOR_EMPRESA = :EMPRESA_ARG OR 0 = :EMPRESA_ARG) --ID_ESP (REMPLAZAR EL 2103 POR LA VARIABLE DEL FRONT)
+                AND 2 = :SECTOR_ARG --FILTRO NO RESIDENCIAL (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                AND (SUBSTR(F3.CAR_T440_DANE,1,2)=LPAD(:DPTO_ARG,2,'0') OR 'TODOS' = :DPTO_ARG) --CODDEPTO (REMPLAZAR EL 8 POR LA VARIABLE DEL FRONT)
+                AND (SUBSTR(F3.CAR_T440_DANE,3,3)=LPAD(:MPO_ARG,3,'0') OR 'TODOS' = :MPO_ARG) --CODMPIO (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                AND (SUBSTR(F3.CAR_T440_DANE,6,3)=LPAD(:CPOBLADO_ARG,3,'0') OR 'TODOS' = :CPOBLADO_ARG) --CODCPOBLADO (REMPLAZAR EL 0 POR LA VARIABLE DEL FRONT)
+                GROUP BY F3.CAR_CARG_ANO, F3.CAR_CARG_MES, F3.IDENTIFICADOR_EMPRESA, 2, F3.CAR_T440_DANE
+            UNION
+            --CREG 015 (RES 20155 Y 12515)
+                SELECT STC1.CAR_CARG_ANO, STC1.CAR_CARG_PERIODO, STC1.ID_COMER
+                , STC1.RES_NORES --USO
+                , STC1.CAR_T1732_DANE_NIU COD_DANE
+                , SUM(STC2.CONSUMO) CONSUMO
+                , SUM(STC2.FACXCON) FACXCON
+                FROM ( SELECT DISTINCT TC1.CAR_CARG_ANO, TC1.CAR_CARG_PERIODO, TC1.IDENTIFICADOR_EMPRESA ID_OR, TC1.CAR_T1732_ID_COMER ID_COMER, TC1.CAR_T1732_DANE_NIU
+                    , DECODE(TC1.CAR_T1732_ESTRATO_SECTOR,1,1,2,2,3,3,4,4,5,5,6,6,7,10,8,11,9,12,10,16,11,17) ESTRATO
+                    , (CASE WHEN TC1.CAR_T1732_ESTRATO_SECTOR BETWEEN 1 AND 6 THEN 1 ELSE 2 END) RES_NORES --USO
+                    , TC1.CAR_T1732_ID_MERCADO || '-' || TC1.CAR_T1732_NIU MERCADO_NIU, TC1.CAR_T1732_ID_MERCADO
+                    FROM ENERGIA_CREG_015.CAR_T1732_TC1_INV_USUARIOS TC1
+                    WHERE TC1.IDENTIFICADOR_EMPRESA < 99800
+                    AND TC1.CAR_CARG_ANO = :ANIO_ARG --ANIO (REMPLAZAR EL 2021 POR LA VARIABLE DEL FRONT)
+                    AND TC1.CAR_CARG_PERIODO = :MES_ARG --MES (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                    AND (TC1.CAR_T1732_ID_COMER = :EMPRESA_ARG OR 0 = :EMPRESA_ARG) --ID_ESP (REMPLAZAR EL 2103 POR LA VARIABLE DEL FRONT)
+                    AND (SUBSTR(TC1.CAR_T1732_DANE_NIU,1,2)=LPAD(:DPTO_ARG,2,'0') OR 'TODOS' = :DPTO_ARG) --CODDEPTO (REMPLAZAR EL 8 POR LA VARIABLE DEL FRONT)
+                    AND (SUBSTR(TC1.CAR_T1732_DANE_NIU,3,3)=LPAD(:MPO_ARG,3,'0') OR 'TODOS' = :MPO_ARG) --CODMPIO (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                    AND (SUBSTR(TC1.CAR_T1732_DANE_NIU,6,3)=LPAD(:CPOBLADO_ARG,3,'0') OR 'TODOS' = :CPOBLADO_ARG) --CODCPOBLADO (REMPLAZAR EL 0 POR LA VARIABLE DEL FRONT)
+                    AND (CASE WHEN TC1.CAR_T1732_ESTRATO_SECTOR BETWEEN 1 AND 6 THEN 1 ELSE 2 END) = :SECTOR_ARG --1= RESIDENCIAL; 2=NO RESIDENCIAL; (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                    ) STC1
+                    INNER JOIN ( SELECT TC2.CAR_CARG_ANO, TC2.CAR_CARG_PERIODO, TC2.IDENTIFICADOR_EMPRESA
+                                , (CASE WHEN INSTR(TC2.CAR_T1743_MERCADO_NIU,'-',1,1) > 0 THEN TC2.CAR_T1743_MERCADO_NIU ELSE TC2.CAR_T1743_ID_MERCADO || '-' || TC2.CAR_T1743_MERCADO_NIU END) MERCADO_NIU
+                                , SUM(CASE WHEN TC2.CAR_T1743_TIPO_FACT=1 AND TC2.CAR_T1743_VAL_RFT_CU >= 0 THEN TC2.CAR_T1743_CONS_USUARIO + TC2.CAR_T1743_RFT_CU
+                                        WHEN TC2.CAR_T1743_TIPO_FACT=1 AND TC2.CAR_T1743_VAL_RFT_CU < 0 THEN TC2.CAR_T1743_CONS_USUARIO - TC2.CAR_T1743_RFT_CU
+                                        WHEN TC2.CAR_T1743_TIPO_FACT<>1 THEN 0 END) CONSUMO
+                                , SUM(TC2.CAR_T1743_VAL_FACT_CU + TC2.CAR_T1743_VAL_RFT_CU) FACXCON
+                                FROM ENERGIA_CREG_015.CAR_T1743_TC2FACTURACION_USU TC2
+                                WHERE TC2.IDENTIFICADOR_EMPRESA < 99800
+                                AND TC2.CAR_CARG_ANO = :ANIO_ARG --ANIO (REMPLAZAR EL 2021 POR LA VARIABLE DEL FRONT)
+                                AND TC2.CAR_CARG_PERIODO = :MES_ARG --MES (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                                AND (TC2.IDENTIFICADOR_EMPRESA = :EMPRESA_ARG OR 0 = :EMPRESA_ARG) --ID_ESP (REMPLAZAR EL 2103 POR LA VARIABLE DEL FRONT)
+                                GROUP BY TC2.CAR_CARG_ANO, TC2.CAR_CARG_PERIODO, TC2.IDENTIFICADOR_EMPRESA
+                                , (CASE WHEN INSTR(TC2.CAR_T1743_MERCADO_NIU,'-',1,1) > 0 THEN TC2.CAR_T1743_MERCADO_NIU ELSE TC2.CAR_T1743_ID_MERCADO || '-' || TC2.CAR_T1743_MERCADO_NIU END)
+                                ) STC2 ON STC1.CAR_CARG_ANO=STC2.CAR_CARG_ANO AND STC1.CAR_CARG_PERIODO=STC2.CAR_CARG_PERIODO AND STC1.ID_COMER=STC2.IDENTIFICADOR_EMPRESA AND STC1.MERCADO_NIU=STC2.MERCADO_NIU
+                GROUP BY STC1.CAR_CARG_ANO, STC1.CAR_CARG_PERIODO, STC1.ID_COMER, STC1.RES_NORES, STC1.CAR_T1732_DANE_NIU
+            ) T,
+            (SELECT * FROM RUPS.ARE_ESP_EMPRESAS) ESP,
+            (SELECT D.DANE_COD_DEPTO, D.DANE_NOM_DPTO, D.DANE_COD_MPIO, D.DANE_NOM_MPIO, D.DANE_COD_CTP, D.DANE_NOM_POBLAD, D.DANE_DIVIPOLA, G.LATITUD, G.LONGITUD
+            FROM CARG_ARCH.DANE_DIVIPOLA D
+            LEFT JOIN JHERRERAA.GIS_CENTRO_POBLADO G ON TO_NUMBER(D.DANE_DIVIPOLA)=G.CODIGO_CENTRO_POBLADO) GIS
+            WHERE T.ID_COMER = ESP.ARE_ESP_SECUE
+            AND T.COD_DANE=GIS.DANE_DIVIPOLA
+            ORDER BY T.CONSUMO DESC
         '''
-        return self.db.engine.execute(text(sql), ANIO_ARG=2019, MES_ARG=1, EMPRESA_ARG=2103, PNEXC_ARG=16, NPNEXC_ARG=0, REMER_ARG=0, STNSTR_ARG=0, 
-        SEGCIU_ARG=0, FNIVEL1_ARG=0, CASTNAT_ARG=0, TERR_ARG=0, CALZESP_ARG=0, TSUBEST_ARG=0, INFRA_ARG=0, SUMI_ARG=0, PEXP_ARG=0).fetchall()
+        return self.db.engine.execute(text(sql), ANIO_ARG=anio, MES_ARG=mes, EMPRESA_ARG=empresa, SECTOR_ARG=sector, DPTO_ARG=dpto, MPO_ARG=mpio, CPOBLADO_ARG=cpoblado).fetchall()

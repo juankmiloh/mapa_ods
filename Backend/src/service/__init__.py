@@ -6,7 +6,7 @@ from .empresa_service import EmpresaService
 from .procesos_service import ProcesosService
 from .servicios_service import ServiciosService
 from .usuarios_service import UsuariosService
-from .estados_service import EstadosService
+from .divipola_service import DivipolaService
 from .tiposancion_service import TiposancionService
 from .anios_service import AniosService
 from .causal_service import CausalService
@@ -24,7 +24,7 @@ class ServiceModule(Module):
         procesos_service = ProcesosService()
         servicios_service = ServiciosService()
         usuarios_service = UsuariosService()
-        estados_service = EstadosService()
+        divipola_service = DivipolaService()
         tiposancion_service = TiposancionService()
         anios_service = AniosService()
         causal_service = CausalService()
@@ -40,7 +40,7 @@ class ServiceModule(Module):
         binder.bind(ProcesosService, to=procesos_service, scope=singleton)
         binder.bind(ServiciosService, to=servicios_service, scope=singleton)
         binder.bind(UsuariosService, to=usuarios_service, scope=singleton)
-        binder.bind(EstadosService, to=estados_service, scope=singleton)
+        binder.bind(DivipolaService, to=divipola_service, scope=singleton)
         binder.bind(TiposancionService, to=tiposancion_service, scope=singleton)
         binder.bind(AniosService, to=anios_service, scope=singleton)
         binder.bind(CausalService, to=causal_service, scope=singleton)

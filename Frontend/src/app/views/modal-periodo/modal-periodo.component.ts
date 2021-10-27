@@ -56,9 +56,9 @@ export class ModalPeriodoComponent implements OnInit {
       this.startDate = new Date(loadData.anio, mes, 1); // Actualizar año y mes seleccionado en el modal de meses
     } else {
       const fecha = new Date();
-      this.selectAnio = fecha.getFullYear();
+      this.selectAnio = fecha.getFullYear() - 2;
       const ctrlDate = this.date.value;
-      ctrlDate.month(this.selectMes);
+      ctrlDate.month(this.selectMes - 5);
       this.optionsMap.get('mes').setValue(ctrlDate);
     }
   }

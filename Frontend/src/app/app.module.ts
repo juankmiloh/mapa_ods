@@ -49,9 +49,6 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { SidenavMenuComponent } from './views/sidenav-menu/sidenav-menu.component';
 import { HomeComponent } from './views/home/home.component';
 import { MapInterrupcionComponent } from './views/map-interrupcion/map-interrupcion.component';
-import { MapOptionsComponent } from './views/map-interrupcion/map-options/map-options.component';
-import { MapStatisticsComponent } from './views/map-interrupcion/map-statistics/map-statistics.component';
-import { MapGraphicsComponent } from './views/map-interrupcion/map-graphics/map-graphics.component';
 import { ModalServicioComponent } from './views/modal-servicio/modal-servicio.component';
 import { ModalPeriodoComponent } from './views/modal-periodo/modal-periodo.component';
 import { ModalEmpresaComponent } from './views/modal-empresa/modal-empresa.component';
@@ -63,9 +60,6 @@ import { ModalCapasComponent } from './views/modal-capas/modal-capas.component';
     SidenavMenuComponent,
     HomeComponent,
     MapInterrupcionComponent,
-    MapOptionsComponent,
-    MapStatisticsComponent,
-    MapGraphicsComponent,
     ModalServicioComponent,
     ModalPeriodoComponent,
     ModalEmpresaComponent,

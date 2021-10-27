@@ -10,6 +10,9 @@ export class AppObservableService {
   private changeBasemap = new Subject<any>();
   private changePeriodo = new Subject<any>();
   private changeEmpresa = new Subject<any>();
+  private changeDepto = new Subject<any>();
+  private changeMpio = new Subject<any>();
+  private changeCpoblado = new Subject<any>();
 
   constructor() {}
 
@@ -43,5 +46,29 @@ export class AppObservableService {
 
   getChangeEmpresa(): Observable<any>  {
     return this.changeEmpresa.asObservable();
+  }
+
+  setChangeDepto(status: any) {
+    this.changeDepto.next(status);
+  }
+
+  getChangeDepto(): Observable<any>  {
+    return this.changeDepto.asObservable();
+  }
+
+  setChangeMpio(status: any) {
+    this.changeMpio.next(status);
+  }
+
+  getChangeMpio(): Observable<any>  {
+    return this.changeMpio.asObservable();
+  }
+
+  setChangeCpoblado(status: any) {
+    this.changeCpoblado.next(status);
+  }
+
+  getChangeCpoblado(): Observable<any>  {
+    return this.changeCpoblado.asObservable();
   }
 }

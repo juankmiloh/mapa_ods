@@ -6,7 +6,7 @@ from .empresa_repository import EmpresaRepository
 from .procesos_repository import ProcesosRepository
 from .servicios_repository import ServiciosRepository
 from .usuarios_repository import UsuariosRepository
-from .estados_repository import EstadosRepository
+from .divipola_repository import DivipolaRepository
 from .tiposancion_repository import TiposancionRepository
 from .anios_repository import AniosRepository
 from .causal_repository import CausalRepository
@@ -28,7 +28,7 @@ class RepositoryModule(Module):
         procesos_repository = ProcesosRepository(self.db)
         servicios_repository = ServiciosRepository(self.db)
         usuarios_repository = UsuariosRepository(self.db)
-        estados_repository = EstadosRepository(self.db)
+        divipola_repository = DivipolaRepository(self.db)
         tiposancion_repository = TiposancionRepository(self.db)
         anios_repository = AniosRepository(self.db)
         causal_repository = CausalRepository(self.db)
@@ -44,7 +44,7 @@ class RepositoryModule(Module):
         binder.bind(ProcesosRepository, to=procesos_repository, scope=singleton)
         binder.bind(ServiciosRepository, to=servicios_repository, scope=singleton)
         binder.bind(UsuariosRepository, to=usuarios_repository, scope=singleton)
-        binder.bind(EstadosRepository, to=estados_repository, scope=singleton)
+        binder.bind(DivipolaRepository, to=divipola_repository, scope=singleton)
         binder.bind(TiposancionRepository, to=tiposancion_repository, scope=singleton)
         binder.bind(AniosRepository, to=anios_repository, scope=singleton)
         binder.bind(CausalRepository, to=causal_repository, scope=singleton)
