@@ -68,12 +68,20 @@ export class ModalEmpresaComponent implements OnInit {
   filteredCpoblados: Observable<any[]>;
 
   ngOnInit(): void {
+    // console.log('Entro a empresas');
     this.loadEmpresas = true;
     this.loadSuiDpto = true;
     const servicio = JSON.parse(localStorage.getItem('servicio'));
     // const servicio = 	{'cod_servicio': 4, 'servicio': 'Energía'};
     this.loadSuiDivipolaDepto({optiondpto: 'depto', optionmpio: 'null', optioncpoblado: 'null', dpto: 0, mpio: 0, cpoblado: 0});
     this.loadSuiEmpresas(servicio);
+  }
+
+  ngOnDestroy() {
+    this.model = {empresa: {cod_empresa: null, nombre: null, cod_servicio: null, servicio: null},
+    depto: {cod: 'TODOS', nombre: 'TODOS'},
+    mpio: {cod: 'TODOS', nombre: 'TODOS'},
+    cpoblado: {cod: 'TODOS', nombre: 'TODOS'}};
   }
 
   // Se hace llamado al servicio para cargar empresas
@@ -114,6 +122,7 @@ export class ModalEmpresaComponent implements OnInit {
         nombre: 'TODOS',
       });
       this.loadSuiDpto = false;
+      this.selectDpto = '';
     }, (error: ISUIError) => {
       this.observer.setShowAlertErrorSUI(error.status);
     });
@@ -186,7 +195,7 @@ export class ModalEmpresaComponent implements OnInit {
   }
 
   changeOptionDpto(evt) {
-    console.log('Escribiendo en el input depto!');
+    // console.log('Escribiendo en el input depto!');
     this.selectMpio = '';
     this.selectCpoblado = '';
     this.suiDivipolaMpio = [];
@@ -194,7 +203,7 @@ export class ModalEmpresaComponent implements OnInit {
   }
 
   changeOptionMpio(evt) {
-    console.log('Escribiendo en el input mpio!');
+    // console.log('Escribiendo en el input mpio!');
     this.selectCpoblado = '';
     this.suiDivipolaCpoblado = [];
   }
@@ -247,11 +256,18 @@ export class ModalEmpresaComponent implements OnInit {
 
   // enviar valores al padre
   sendDataParent() {
+    // console.log('model departamento hpta! --> ', this.model['depto']);
     const idEmpresa = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).id_empresa;
     const codServicio = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).cod_servicio;
     const nombreServicio = this.suiEmpresas.find(empresa => this.selectEmpresa === empresa.nombre).servicio;
     // tslint:disable-next-line: max-line-length
     this.model['empresa'] = {cod_empresa: idEmpresa, nombre: this.selectEmpresa, cod_servicio: codServicio, servicio: nombreServicio };
+    if (!this.selectDpto) {
+      // console.log('Seleccion depto --> ', this.selectDpto);
+      this.model['depto'] = {cod: 'TODOS', nombre: 'TODOS'};
+      this.model['mpio'] = {cod: 'TODOS', nombre: 'TODOS'};
+      this.model['cpoblado'] = {cod: 'TODOS', nombre: 'TODOS'};
+    }
     const data = { modal: 'empresa', value: this.model };
     this.dialogRef.close(data);
   }

@@ -30,7 +30,7 @@ export class ModalCapasComponent implements OnInit {
   }
 
   selectLayers() {
-    console.log('selectedLayers -> ', this.listLayers._value[0]);
+    // console.log('selectedLayers -> ', this.listLayers._value[0]);
     const options = this.listLayers._value[0];
     if (options === 'Consumos') {
       this.openBottomSheet();
@@ -48,7 +48,7 @@ export class ModalCapasComponent implements OnInit {
 
     // subscribe to observable que se ejecuta despues de cerrar el modal, obtiene los valores del hijo
     this.bottomSheetRef.afterDismissed().subscribe(async (dataFromChild: any) => {
-      console.log('valores enviados del hijo', dataFromChild);
+      // console.log('valores enviados del hijo', dataFromChild);
       let codOption = null;
       if (dataFromChild === 'Usuarios residenciales') {
         codOption = 1;

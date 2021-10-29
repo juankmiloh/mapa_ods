@@ -86,7 +86,7 @@ export class SidenavMenuComponent {
 
       // Acciones luego de cerrar el modal
       dialogRef.afterClosed().subscribe((dataFromModal) => {
-        console.log('The dialog was closed', dataFromModal);
+        // console.log('The dialog was closed', dataFromModal);
         if (dataFromModal) {
           if (dataFromModal.modal === 'servicio') {
             const loadData = JSON.parse(localStorage.getItem('servicio'));
@@ -114,9 +114,9 @@ export class SidenavMenuComponent {
             this.options[4]['hidden'] = false; // Se habilita en la lista del menu LATERAL la opcion de PERIODO
             this.observer.setChangeSector(dataFromModal.value);
           } else if (dataFromModal.modal === 'periodo') {
+            localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
             this.observer.setChangePeriodo(dataFromModal.value);
             this.options[4].select = dataFromModal.value.label; // Se muestra msj de la opcion seleccionada
-            localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
             this.options[5]['hidden'] = false; // Se habilita en la lista del menu LATERAL la opcion de empresas
             this.listSidenav.deselectAll();
           } else if (dataFromModal.modal === 'empresa') {
@@ -128,8 +128,8 @@ export class SidenavMenuComponent {
             } catch (error) {
               console.log(error);
             }
-            this.observer.setChangeEmpresa(dataFromModal.value);
             localStorage.setItem('empresa', JSON.stringify(dataFromModal.value));
+            this.observer.setChangeEmpresa(dataFromModal.value);
           } else {
             return;
           }

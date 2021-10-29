@@ -61,7 +61,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     this.validateChangeServicio();
     // Validar conexion SUI
     await this.verifyConnectionSUI().then((data: any) => {
-      console.log('estado servidor: ', data);
+      // console.log('estado servidor: ', data);
       if (data.status !== undefined) {
         this.observer.setShowAlertErrorSUI(data.status);
       }
@@ -88,7 +88,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   // observable para validar si hay error en la conexion con la BD SUI
   validateConnectionSUI() {
     this.observer.getShowAlertErrorSUI().subscribe((status) => {
-      console.log('status servidor: ', status);
+      // console.log('status servidor: ', status);
       // Si no hay conexion con el servidor
       if (status === 0) {
         this.alertSwal.swalOptions = {
@@ -153,7 +153,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   // Observable que permite controlar el cambio de servicio
   validateChangeServicio() {
     this.observer.getChangeServicio().subscribe(async (status) => {
-      console.log('Status observable servicio --> ', status);
+      // console.log('Status observable servicio --> ', status);
       if (status === 'updateMap') {
         if (this.view) {
           this.view.container = null; // destroy the map view
@@ -190,7 +190,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   // Observable que permite controlar el cambio de sector
   validateChangeSector() {
     this.observer.getChangeSector().subscribe((status) => {
-      console.log('Status observable sector --> ', status);
+      // console.log('Status observable sector --> ', status);
       this.sector = status;
       const servicio = JSON.parse(localStorage.getItem('servicio'));
       const empresa = JSON.parse(localStorage.getItem('empresa'));
@@ -225,7 +225,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   // Observable que permite controlar el cambio de periodo (año | mes)
   validateChangePeriodo() {
     this.observer.getChangePeriodo().subscribe((status) => {
-      console.log('Status observable periodo --> ', this.empresa.cpoblado.cod === null ? 'TODOS' : this.empresa.cpoblado.cod);
+      // console.log('Status observable periodo --> ', this.empresa.cpoblado.cod === null ? 'TODOS' : this.empresa.cpoblado.cod);
       this.periodo = status;
       if (this.empresa.empresa.cod_empresa !== null) {
         const capa = JSON.parse(localStorage.getItem('capas'));
@@ -259,7 +259,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   // Observable que permite controlar el cambio de empresa (año | mes)
   validateChangeEmpresa() {
     this.observer.getChangeEmpresa().subscribe((status) => {
-      console.log('Status observable empresa --> ', status);
+      // console.log('Status observable empresa --> ', status);
       this.empresa = status;
       if (this.periodo) {
         const capa = JSON.parse(localStorage.getItem('capas'));
@@ -287,7 +287,6 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
         // };
         // this.alertSwal.fire();
       }
-      console.log('juan camilo depto --> ', this.depto);
     });
   }
 
