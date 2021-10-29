@@ -4,9 +4,9 @@ from flask import send_file  # descargar archivos
 
 class InterrupcionesService:
 
-    def get_interrupciones(self, interrupciones_repository: InterrupcionesRepository, anio, mes, empresa, sector, dpto, mpio, cpoblado):
+    def get_interrupciones(self, interrupciones_repository: InterrupcionesRepository, servicio, anio, mes, empresa, sector, dpto, mpio, cpoblado):
         interrupciones = []
-        data = interrupciones_repository.get_interrupciones_bd(anio, mes, empresa, sector, dpto, mpio, cpoblado)
+        data = interrupciones_repository.get_interrupciones_bd(servicio, anio, mes, empresa, sector, dpto, mpio, cpoblado)
         for result in data:
             interrupciones.append(
                 {

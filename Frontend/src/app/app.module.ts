@@ -53,6 +53,7 @@ import { ModalServicioComponent } from './views/modal-servicio/modal-servicio.co
 import { ModalPeriodoComponent } from './views/modal-periodo/modal-periodo.component';
 import { ModalEmpresaComponent } from './views/modal-empresa/modal-empresa.component';
 import { ModalCapasComponent } from './views/modal-capas/modal-capas.component';
+import { ModalConsumoComponent } from './views/modal-consumo/modal-consumo.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { ModalCapasComponent } from './views/modal-capas/modal-capas.component';
     ModalPeriodoComponent,
     ModalEmpresaComponent,
     ModalCapasComponent,
+    ModalConsumoComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,7 +119,7 @@ import { ModalCapasComponent } from './views/modal-capas/modal-capas.component';
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'} },
-    { provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true} },
+    // { provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: {hasBackdrop: true} },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true} },
     IgxExcelExporterService,
   ],

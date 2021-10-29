@@ -35,7 +35,7 @@ export const LIST_SIDENAV = [
     {
         name: 'Empresa',
         icon: 'corporate_fare',
-        hidden: false,
+        hidden: true,
     },
     {
         name: 'divider',

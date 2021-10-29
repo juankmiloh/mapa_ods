@@ -131,3 +131,9 @@ mat-datepicker-content {
 // .mat-dialog-container {
 //     overflow: hidden !important;
 // }
+
+.custom-width {
+    min-height: 28vh;
+    min-width: 25vw !important;
+    // margin-top: 80px;
+}

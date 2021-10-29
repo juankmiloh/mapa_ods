@@ -10,6 +10,8 @@ class DivipolaService:
                 {
                     'cod': result[0],
                     'nombre': result[1],
+                    'cod_depto': result[2],
+                    'nombre_depto': result[3],
                 }
             )
         return divipola

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { setDefaultOptions, loadModules, loadCss } from 'esri-loader';
-import { IOptionsMapa } from 'src/app/models/IOptionsMapa.model';
+import { IOptionsEmrepsa, IOptionsMapa, modelEmpresa } from 'src/app/models/IOptionsMapa.model';
 import * as d3 from 'd3';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppObservableService } from '../../services/app-observable.service';
@@ -19,6 +19,8 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   depto: any;
   mpio: any;
   cpoblado: any;
+  sector: any;
+  servicio: any;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -33,7 +35,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   public view: any;
   serverUrl = environment.serverUrl;
   periodo = null;
-  empresa = null;
+  empresa: IOptionsEmrepsa = modelEmpresa;
   legend: any;
   errorMessage = '';
   // Controla el CSS del Backdrop
@@ -55,9 +57,8 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     this.validateChangePeriodo();
     this.validateChangeBasemap();
     this.validateChangeEmpresa();
-    this.validateChangeDepto();
-    this.validateChangeMpio();
-    this.validateChangeCpoblado();
+    this.validateChangeSector();
+    this.validateChangeServicio();
     // Validar conexion SUI
     await this.verifyConnectionSUI().then((data: any) => {
       console.log('estado servidor: ', data);
@@ -102,12 +103,13 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           allowOutsideClick: false,
         };
 
-        this.alertSwal.fire().then((data) => {
-          if (data.value) {
-            // window.location.href = 'https://wa.link/2zk6io';
-            window.location.reload();
-          }
-        });
+        // this.alertSwal.fire().then((data) => {
+        //   if (data.value) {
+        //     // window.location.href = 'https://wa.link/2zk6io';
+        //     window.location.reload();
+        //   }
+        // });
+        console.log('No hay conexión con el servidor');
       }
 
       // Error interno del servidor
@@ -148,25 +150,101 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Observable que permite controlar el cambio de periodo (año | mes)
-  validateChangePeriodo() {
-    this.observer.getChangePeriodo().subscribe((status) => {
-      console.log('Status observable periodo --> ', this.empresa);
-      this.periodo = status;
-      if (this.empresa !== null) {
+  // Observable que permite controlar el cambio de servicio
+  validateChangeServicio() {
+    this.observer.getChangeServicio().subscribe(async (status) => {
+      console.log('Status observable servicio --> ', status);
+      if (status === 'updateMap') {
+        if (this.view) {
+          this.view.container = null; // destroy the map view
+        }
+        this.options = {
+          zoom: 5,
+          latitud: 3.5,
+          longitud: -71.47106040285713,
+        };
+
+        await this.initializeMap(this.options).then(mapView => {});
+        this.openSnackBar('Seleccione una empresa', 'oK', 3000);
+      } else {
+        if (this.empresa.empresa.cod_empresa !== null && this.periodo && this.sector) {
+          this.servicio = status;
+          const options: IOptionsMapa = {
+            servicio: status,
+            ano: this.periodo.anio,
+            mes: this.periodo.mes,
+            empresa: this.empresa.empresa.cod_empresa,
+            dpto: this.empresa.depto.cod,
+            mpio: this.empresa.mpio.cod,
+            cpoblado: this.empresa.cpoblado.cod,
+            sector: this.sector.option.cod,
+          };
+          this.addLayer(options).then((data) => {
+            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+          });
+        }
+      }
+    });
+  }
+
+  // Observable que permite controlar el cambio de sector
+  validateChangeSector() {
+    this.observer.getChangeSector().subscribe((status) => {
+      console.log('Status observable sector --> ', status);
+      this.sector = status;
+      const servicio = JSON.parse(localStorage.getItem('servicio'));
+      const empresa = JSON.parse(localStorage.getItem('empresa'));
+      const periodo = JSON.parse(localStorage.getItem('periodo'));
+      if (servicio && empresa && periodo) {
         const options: IOptionsMapa = {
-          ano: status.anio,
-          mes: status.mes,
-          empresa: this.empresa,
-          dpto: this.depto,
-          mpio: this.mpio,
-          cpoblado: this.cpoblado,
+          servicio: servicio.cod_servicio,
+          ano: periodo.anio,
+          mes: periodo.mes,
+          empresa: empresa.empresa.cod_empresa,
+          dpto: empresa.depto.cod,
+          mpio: empresa.mpio.cod,
+          cpoblado: empresa.cpoblado.cod,
+          sector: status.option.cod,
         };
         this.addLayer(options).then((data) => {
           this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
         });
       } else {
-        this.openSnackBar('Seleccione una empresa.', null);
+        this.openSnackBar('Seleccione un servicio', 'oK', 3000);
+        // this.alertSwal.swalOptions = {
+        //   title: 'Info',
+        //   text: 'Seleccione una empresa',
+        //   icon: 'info',
+        //   allowOutsideClick: false,
+        // };
+        // this.alertSwal.fire();
+      }
+    });
+  }
+
+  // Observable que permite controlar el cambio de periodo (año | mes)
+  validateChangePeriodo() {
+    this.observer.getChangePeriodo().subscribe((status) => {
+      console.log('Status observable periodo --> ', this.empresa.cpoblado.cod === null ? 'TODOS' : this.empresa.cpoblado.cod);
+      this.periodo = status;
+      if (this.empresa.empresa.cod_empresa !== null) {
+        const capa = JSON.parse(localStorage.getItem('capas'));
+        const servicio = JSON.parse(localStorage.getItem('servicio'));
+        const options: IOptionsMapa = {
+          servicio: servicio.cod_servicio,
+          ano: status.anio,
+          mes: status.mes,
+          empresa: this.empresa.empresa.cod_empresa,
+          dpto: this.empresa.depto.cod,
+          mpio: this.empresa.mpio.cod,
+          cpoblado: this.empresa.cpoblado.cod,
+          sector: capa.option.cod,
+        };
+        this.addLayer(options).then((data) => {
+          this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+        });
+      } else {
+        this.openSnackBar('Seleccione una empresa', 'oK', 3000);
         // this.alertSwal.swalOptions = {
         //   title: 'Info',
         //   text: 'Seleccione una empresa',
@@ -182,21 +260,25 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   validateChangeEmpresa() {
     this.observer.getChangeEmpresa().subscribe((status) => {
       console.log('Status observable empresa --> ', status);
-      this.empresa = status.id_empresa;
+      this.empresa = status;
       if (this.periodo) {
+        const capa = JSON.parse(localStorage.getItem('capas'));
+        const servicio = JSON.parse(localStorage.getItem('servicio'));
         const options: IOptionsMapa = {
+          servicio: servicio.cod_servicio,
           ano: this.periodo.anio,
           mes: this.periodo.mes,
-          empresa: this.empresa,
-          dpto: this.depto,
-          mpio: this.mpio,
-          cpoblado: this.cpoblado,
+          empresa: status.empresa.cod_empresa,
+          dpto: status.depto.cod,
+          mpio: status.mpio.cod,
+          cpoblado: status.cpoblado.cod,
+          sector: capa.option.cod,
         };
         this.addLayer(options).then((data) => {
           this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
         });
       } else {
-        this.openSnackBar('Seleccione un período.', null);
+        this.openSnackBar('Seleccione un período', 'oK', 3000);
         // this.alertSwal.swalOptions = {
         //   title: 'Info',
         //   text: 'Seleccione un período',
@@ -209,30 +291,6 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Observable que permite controlar el cambio de departamento
-  validateChangeDepto() {
-    this.observer.getChangeDepto().subscribe((status) => {
-      console.log('Status observable departamento --> ', status.cod);
-      this.depto = status.cod;
-    });
-  }
-
-  // Observable que permite controlar el cambio de municipio
-  validateChangeMpio() {
-    this.observer.getChangeMpio().subscribe((status) => {
-      console.log('Status observable municipio --> ', status.cod);
-      this.mpio = status.cod;
-    });
-  }
-
-  // Observable que permite controlar el cambio de centro poblado
-  validateChangeCpoblado() {
-    this.observer.getChangeCpoblado().subscribe((status) => {
-      console.log('Status observable centro poblado --> ', status.cod);
-      this.cpoblado = status.cod;
-    });
-  }
-
   ngOnDestroy() {
     if (this.view) {
       this.view.container = null; // destroy the map view
@@ -240,10 +298,10 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   }
 
   // Mostrar mensaje flotante en el footer de la pagina
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string, duration?: number) {
     this.snackBar.open(message, action, {
-      duration: 2000,
-      horizontalPosition: 'right',
+      duration: duration ? duration : 2000,
+      horizontalPosition: 'center',
       verticalPosition: 'bottom',
     });
   }
@@ -316,7 +374,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       watchUtils.whenFalse(this.view, 'updating', (evt: any) => {
         // console.log('closeLoad', evt);
         if (this.updateLayerCSV) {
-          this.openSnackBar('Datos actualizados correctamente.', null);
+          this.openSnackBar('Datos actualizados correctamente', null);
           this.snackBar._openedSnackBarRef.afterOpened().subscribe(async (data) => {
             this.updateLayerCSV = false;
           });
@@ -355,7 +413,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     const [CSVLayer] = await loadModules(['esri/layers/CSVLayer']);
     // tslint:disable-next-line: max-line-length
     // const urlOptions = `${this.serverUrl}/interrupciones?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
-    const urlOptions = `${this.serverUrl}/interrupciones?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=2&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    const urlOptions = `${this.serverUrl}/interrupciones?servicio=${options.servicio}&anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
     console.log(urlOptions);
     this.dataCSV = d3.csv(urlOptions);
 
@@ -364,6 +422,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       console.log('DATA CSV -> ', data);
       if (data.length === 0) {
         this.alertSwal.swalOptions = {
+          title: 'Info',
           text: 'No hay información para este período.',
           icon: 'info',
           confirmButtonText: 'Aceptar',
@@ -384,11 +443,18 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       // * cod_empresa - empresa del municipio
       // * total - total de horas de interrupciones
 
+      let medida = null;
+      if (options.servicio === 4) {
+        medida = 'kwh';
+      } else if (options.servicio === 5) {
+        medida = 'm3';
+      }
+
       const template = {
         // tslint:disable-next-line: max-line-length
         title:  '<div style="border: 0px solid black; background: #e3f2fd; width: 15em; border-radius: 5px; height: 4em; padding-top: 0.3em;">' +
                 '  <small style="color: #3f51b5; font-size: x-small;"><b>{nom_empresa}</b></small><br>' +
-                '  <small style="color: #212121; padding-left: 3%;">Consumo {consumo}kwh</small>' +
+                `  <small style="color: #212121; padding-left: 3%;">Consumo {consumo}${medida}</small>` +
                 '</div>',
         content: '<div>' +
                  ' <small>{dane_nom_dpto} - {dane_nom_mpio} - {dane_nom_poblad}</small><br>' +

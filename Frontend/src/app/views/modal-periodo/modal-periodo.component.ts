@@ -58,7 +58,7 @@ export class ModalPeriodoComponent implements OnInit {
       const fecha = new Date();
       this.selectAnio = fecha.getFullYear() - 2;
       const ctrlDate = this.date.value;
-      ctrlDate.month(this.selectMes - 5);
+      ctrlDate.month(this.selectMes);
       this.optionsMap.get('mes').setValue(ctrlDate);
     }
   }

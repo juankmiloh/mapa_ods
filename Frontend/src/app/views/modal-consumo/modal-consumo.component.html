@@ -1,13 +1,13 @@
-<div class="example-container">
+<div>
     <mat-toolbar color="primary">
         <mat-toolbar-row>
-            <span>Capas</span>
+            <span>Seleccione una opción</span>
         </mat-toolbar-row>
     </mat-toolbar>
 </div>
-<div class="container-fluid" style="padding-top: 1em; padding-bottom: 1em; border: 0px solid red;">
+<div class="container-fluid" style="padding-top: 1em; padding-bottom: 1em; border: 0px solid red; text-align: center;">
     <mat-divider></mat-divider>
-    <mat-selection-list #layers class="select-layers" [(ngModel)]="selectedLayers" [multiple]="false" (click)="selectLayers()">
+    <mat-selection-list #layers class="select-layers" [(ngModel)]="selectedLayers" [multiple]="false">
         <mat-list-option *ngFor="let layer of typesOfLayers" [value]="layer">
             {{layer}}
         </mat-list-option>
@@ -18,9 +18,9 @@
     </p> -->
     <mat-divider></mat-divider>
 
-    <!-- <div style="text-align: center; padding-top: 1em;">
+    <div style="text-align: center; padding-top: 1em;">
         <button type="submit" mat-mini-fab color="accent" (click)="selectLayers()">
             <mat-icon aria-label="Side nav toggle icon">check</mat-icon>
         </button>
-    </div> -->
+    </div>
 </div>

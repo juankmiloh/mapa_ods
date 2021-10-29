@@ -22,6 +22,7 @@ export class SidenavMenuComponent {
   depto: any;
   mpio: any;
   cpoblado: any;
+  usuariosConsumo: string;
 
   constructor(
     public dialog: MatDialog,
@@ -39,33 +40,6 @@ export class SidenavMenuComponent {
     localStorage.removeItem('periodo');
     localStorage.removeItem('capas');
     localStorage.removeItem('empresa');
-    this.validateChangeDepto();
-    this.validateChangeMpio();
-    this.validateChangeCpoblado();
-  }
-
-  // Observable que permite controlar el cambio de departamento
-  validateChangeDepto() {
-    this.observer.getChangeDepto().subscribe((status) => {
-      console.log('Status observable departamento --> ', status.nombre);
-      this.depto = status.nombre;
-    });
-  }
-
-  // Observable que permite controlar el cambio de departamento
-  validateChangeMpio() {
-    this.observer.getChangeMpio().subscribe((status) => {
-      console.log('Status observable municipio --> ', status.nombre);
-      this.mpio = status.nombre;
-    });
-  }
-
-  // Observable que permite controlar el cambio de centro poblado
-  validateChangeCpoblado() {
-    this.observer.getChangeCpoblado().subscribe((status) => {
-      console.log('Status observable centro poblado --> ', status.nombre);
-      this.cpoblado = status.nombre;
-    });
   }
 
   close(reason: string) {}
@@ -115,12 +89,30 @@ export class SidenavMenuComponent {
         console.log('The dialog was closed', dataFromModal);
         if (dataFromModal) {
           if (dataFromModal.modal === 'servicio') {
-            this.options[2].select = dataFromModal.value['servicio'];
+            const loadData = JSON.parse(localStorage.getItem('servicio'));
+            if (loadData) {
+              if (loadData.cod_servicio !== dataFromModal.value.cod_servicio) {
+                localStorage.removeItem('empresa');
+                this.observer.setChangeServicio('updateMap');
+                this.empresa = 'OBJETIVOS DE DESARROLLO SOSTENIBLE';
+                this.depto = null;
+                this.mpio = null;
+                this.cpoblado = null;
+              } else {
+                const dataEmpresa = localStorage.getItem('empresa');
+                if (dataEmpresa) {
+                  this.observer.setChangeServicio(dataFromModal.value.cod_servicio);
+                }
+              }
+            }
             localStorage.setItem('servicio', JSON.stringify(dataFromModal.value));
+            this.options[2].select = dataFromModal.value['servicio'];
           } else if (dataFromModal.modal === 'capas') {
-            this.options[3].select = dataFromModal.value[0]; // Se muestra msj de la opcion seleccionada
-            this.options[4]['hidden'] = false; // Se habilita en la lista del menu LATERAL la opcion de PERIODO
             localStorage.setItem('capas', JSON.stringify(dataFromModal.value));
+            this.options[3].select = dataFromModal.value.capa; // Se muestra msj de la opcion seleccionada
+            this.usuariosConsumo = dataFromModal.value.option.nombre;
+            this.options[4]['hidden'] = false; // Se habilita en la lista del menu LATERAL la opcion de PERIODO
+            this.observer.setChangeSector(dataFromModal.value);
           } else if (dataFromModal.modal === 'periodo') {
             this.observer.setChangePeriodo(dataFromModal.value);
             this.options[4].select = dataFromModal.value.label; // Se muestra msj de la opcion seleccionada
@@ -128,8 +120,15 @@ export class SidenavMenuComponent {
             this.options[5]['hidden'] = false; // Se habilita en la lista del menu LATERAL la opcion de empresas
             this.listSidenav.deselectAll();
           } else if (dataFromModal.modal === 'empresa') {
+            try {
+              this.empresa = dataFromModal.value.empresa.nombre;
+              this.depto = dataFromModal.value.depto.nombre;
+              this.mpio = dataFromModal.value.mpio.nombre;
+              this.cpoblado = dataFromModal.value.cpoblado.nombre;
+            } catch (error) {
+              console.log(error);
+            }
             this.observer.setChangeEmpresa(dataFromModal.value);
-            this.empresa = dataFromModal.value.nombre;
             localStorage.setItem('empresa', JSON.stringify(dataFromModal.value));
           } else {
             return;

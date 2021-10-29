@@ -2,6 +2,7 @@ export interface IOptionsMapa {
   zoom?: number;
   latitud?: number;
   longitud?: number;
+  servicio?: number;
   ano?: number;
   mes?: number;
   empresa?: number;
@@ -69,3 +70,17 @@ export interface Section {
   header?: string;
   select?: string;
 }
+
+export interface IOptionsEmrepsa {
+  empresa: {cod_empresa: number, nombre: string, cod_servicio: number, servicio: string};
+  depto: {cod: any, nombre: any};
+  mpio: {cod: any, nombre: any};
+  cpoblado: {cod: any, nombre: any};
+}
+
+export const modelEmpresa = {
+  empresa: {cod_empresa: null, nombre: null, cod_servicio: null, servicio: null},
+  depto: {cod: 'TODOS', nombre: 'TODOS'},
+  mpio: {cod: 'TODOS', nombre: 'TODOS'},
+  cpoblado: {cod: 'TODOS', nombre: 'TODOS'},
+};
