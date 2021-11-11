@@ -4,18 +4,18 @@ import { MatSelectionList } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-modal-consumo',
-  templateUrl: './modal-consumo.component.html',
-  styleUrls: ['./modal-consumo.component.scss'],
+  selector: 'app-modal-estratificacion',
+  templateUrl: './modal-estratificacion.component.html',
+  styleUrls: ['./modal-estratificacion.component.scss'],
 })
-export class ModalConsumoComponent implements OnInit {
+export class ModalEstratificacionComponent implements OnInit {
   @ViewChild('layers') listLayers: MatSelectionList;
 
   selectedLayers: string[]; // this array will contain the selected layers
-  typesOfLayers: string[] = ['Usuarios residenciales', 'Usuarios no residenciales'];
+  typesOfLayers: string[] = ['Estratos registrados por el prestador iguales a los de la alcaldía', 'Estratos registrados por el prestador diferentes a los de la alcaldía', 'Estratos registrados por el prestador sin registro en alcaldía'];
 
   constructor(
-    private dialogRef: MatBottomSheetRef<ModalConsumoComponent>,
+    private dialogRef: MatBottomSheetRef<ModalEstratificacionComponent>,
     private snackBar: MatSnackBar,
   ) { }
 
@@ -27,7 +27,7 @@ export class ModalConsumoComponent implements OnInit {
     if (option) {
       this.dialogRef.dismiss(option[0]);
     } else {
-      this.openSnackBar('Seleccione un sector', null, null, 'rigth');
+      this.openSnackBar('Seleccione una opción de estratificación', null, null, 'rigth');
     }
   }
 

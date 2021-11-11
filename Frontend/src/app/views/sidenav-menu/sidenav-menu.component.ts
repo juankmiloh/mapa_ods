@@ -86,7 +86,7 @@ export class SidenavMenuComponent {
 
       // Acciones luego de cerrar el modal
       dialogRef.afterClosed().subscribe((dataFromModal) => {
-        // console.log('The dialog was closed', dataFromModal);
+        console.log('The dialog was closed', dataFromModal);
         if (dataFromModal) {
           if (dataFromModal.modal === 'servicio') {
             const loadData = JSON.parse(localStorage.getItem('servicio'));
@@ -110,9 +110,13 @@ export class SidenavMenuComponent {
           } else if (dataFromModal.modal === 'capas') {
             localStorage.setItem('capas', JSON.stringify(dataFromModal.value));
             this.options[3].select = dataFromModal.value.capa; // Se muestra msj de la opcion seleccionada
-            this.usuariosConsumo = dataFromModal.value.option.nombre;
             this.options[4]['hidden'] = false; // Se habilita en la lista del menu LATERAL la opcion de PERIODO
-            this.observer.setChangeSector(dataFromModal.value);
+            if (dataFromModal.value.capa === 'consumos') {
+              this.usuariosConsumo = dataFromModal.value.option.nombre;
+              this.observer.setChangeSector(dataFromModal.value);
+            } else if (dataFromModal.value.capa === 'estratificacion') {
+              console.log('Selecciono estratificacion!');
+            }
           } else if (dataFromModal.modal === 'periodo') {
             localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
             this.observer.setChangePeriodo(dataFromModal.value);

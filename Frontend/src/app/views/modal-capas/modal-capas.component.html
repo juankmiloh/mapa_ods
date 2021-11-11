@@ -9,7 +9,8 @@
     <mat-divider></mat-divider>
     <mat-selection-list #layers class="select-layers" [(ngModel)]="selectedLayers" [multiple]="false" (click)="selectLayers()">
         <mat-list-option *ngFor="let layer of typesOfLayers" [value]="layer">
-            {{layer}}
+            <span *ngIf="layer === 'Calidad del servicio'">{{layer}}</span><span *ngIf="layer === 'Calidad del servicio'" style="color: #D32F2F; font-weight: bold; font-size: small;">En construcción</span><mat-icon *ngIf="layer === 'Calidad del servicio'" mat-list-icon>arrow_right_alt</mat-icon>
+            <span *ngIf="layer !== 'Calidad del servicio'">{{layer}}</span><mat-icon *ngIf="layer !== 'Calidad del servicio'" mat-list-icon>arrow_right_alt</mat-icon>
         </mat-list-option>
     </mat-selection-list>
 

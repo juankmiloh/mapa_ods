@@ -179,7 +179,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
             cpoblado: this.empresa.cpoblado.cod,
             sector: this.sector.option.cod,
           };
-          this.addLayer(options).then((data) => {
+          this.addLayerConsumo(options).then((data) => {
             this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
           });
         }
@@ -206,7 +206,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           cpoblado: empresa.cpoblado.cod,
           sector: status.option.cod,
         };
-        this.addLayer(options).then((data) => {
+        this.addLayerConsumo(options).then((data) => {
           this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
         });
       } else {
@@ -240,7 +240,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           cpoblado: this.empresa.cpoblado.cod,
           sector: capa.option.cod,
         };
-        this.addLayer(options).then((data) => {
+        this.addLayerConsumo(options).then((data) => {
           this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
         });
       } else {
@@ -272,11 +272,20 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           dpto: status.depto.cod,
           mpio: status.mpio.cod,
           cpoblado: status.cpoblado.cod,
-          sector: capa.option.cod,
+          // sector: capa.option.cod,
         };
-        this.addLayer(options).then((data) => {
-          this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
-        });
+        if (capa.capa === 'consumos') {
+          options['sector'] = capa.option.cod;
+          this.addLayerConsumo(options).then((data) => {
+            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+          });
+        }
+        if (capa.capa === 'estratificacion') {
+          options['sector'] = capa.option.cod;
+          this.addLayerEstratificacion(options).then((data) => {
+            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+          });
+        }
       } else {
         this.openSnackBar('Seleccione un período', 'oK', 3000);
         // this.alertSwal.swalOptions = {
@@ -393,7 +402,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       this.view.ui.remove([basemapToggle, 'zoom']);           // Elimina los botones de zoom
       this.view.ui.add(track, 'top-right');                   // Muestra el boton de MyLocation
 
-      // this.view.map.layers = await this.addLayer(options);
+      // this.view.map.layers = await this.addLayerConsumo(options);
 
       return this.view;
 
@@ -402,7 +411,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     }
   }
 
-  async addLayer(options: IOptionsMapa) {
+  async addLayerConsumo(options: IOptionsMapa) {
     // console.log('OPTIONS: ', options);
     this.updateLayerCSV = true;
     this.legend.style = { type: 'card', layout: 'side-by-side' }; // CSS leyenda tipo card
@@ -489,6 +498,106 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
         url: urlOptions,
         // title: `Interrupciones ${options.colSui} ${this.meses[options.mes]} de ${options.ano}`,
         title: `Intensidad de consumo`,
+        copyright: 'DESARROLLADO POR JUAN CAMILO HERRERA - SUPERSERVICIOS',
+        popupTemplate: template,
+        renderer,
+      });
+
+      this.options = options; // Actualiza los valores seleccionados en modal OPTIONS
+
+      return layer;
+    } catch (error) {
+      // console.log('EsriLoader: ', error);
+    }
+  }
+
+  async addLayerEstratificacion(options: IOptionsMapa) {
+    // console.log('OPTIONS: ', options);
+    this.updateLayerCSV = true;
+    this.legend.style = { type: 'card', layout: 'side-by-side' }; // CSS leyenda tipo card
+
+    this.view.ui.add(this.legend, { position: 'bottom-left' });  // Muestra las convenciones del mapa
+
+    const [CSVLayer] = await loadModules(['esri/layers/CSVLayer']);
+    // tslint:disable-next-line: max-line-length
+    // const urlOptions = `${this.serverUrl}/interrupciones?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    const urlOptions = `${this.serverUrl}/estratificacion?servicio=${options.servicio}&anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    console.log(urlOptions);
+    this.dataCSV = d3.csv(urlOptions);
+
+    // Validación para saber si existen datos de vuelta de la URL
+    this.dataCSV.then((data: ICausas) => {
+      console.log('DATA CSV -> ', data);
+      if (data.length === 0) {
+        this.alertSwal.swalOptions = {
+          title: 'Info',
+          text: 'No hay información para este período.',
+          icon: 'info',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#ffa726',
+          allowOutsideClick: true,
+        };
+        this.alertSwal.fire();
+      }
+    });
+
+    try {
+      // Paste the url into a browser's address bar to download and view the attributes
+      // in the CSV file. These attributes include:
+      // * centro_poblado - nombre municipio
+      // * longitude - longitud municipio
+      // * latitude - latitud municipio
+      // * cod_dane - codigo dane municipio
+      // * cod_empresa - empresa del municipio
+      // * total - total de horas de interrupciones
+
+      let medida = null;
+      if (options.servicio === 4) {
+        medida = 'kwh';
+      } else if (options.servicio === 5) {
+        medida = 'm3';
+      }
+
+      const template = {
+        // tslint:disable-next-line: max-line-length
+        title:  '<div style="border: 0px solid black; background: #e3f2fd; width: 15em; border-radius: 5px; height: 4em; padding-top: 0.3em;">' +
+                '  <small style="color: #3f51b5; font-size: x-small;"><b>{dane_nom_poblad}</b></small><br>' +
+                `  <small style="color: #212121; padding-left: 3%;">Total estratos {cantidad_estratos}</small>` +
+                '</div>',
+        content: '<div>' +
+                 ' <small>{nom_empresa}</small><br>' +
+                 ' <small>Código DANE centro poblado {cod_dane}</small><br>' +
+                 '</div>',
+      };
+
+      // The heatmap renderer assigns each pixel in the view with
+      // an intensity value. The ratio of that intensity value
+      // to the maxPixel intensity is used to assign a color
+      // from the continuous color ramp in the colorStops property
+      const renderer = {
+        type: 'heatmap',
+        field: `cantidad_estratos`,
+        colorStops: [
+          { color: 'rgba(63, 40, 102, 0)', ratio: 0 }, // rango de 0 a 1
+          { color: '#6300df', ratio: 0.083 },          // Azul claro
+          { color: '#2196f3', ratio: 0.100 },          // Azul
+          { color: '#00ff2c', ratio: 0.166 },          // Verde Clarito
+          { color: '#a1ff00', ratio: 0.249 },          // Verde
+          { color: '#e5ff00', ratio: 0.332 },          // Amarillo claro
+          { color: '#ffeb3b', ratio: 0.415 },          // Amarillo
+          { color: '#ffc700', ratio: 0.498 },          // Amarillo oscuro
+          { color: '#fea701', ratio: 0.581 },          // Naranja claro
+          { color: '#ff9800', ratio: 0.664 },          // Naranja
+          { color: '#f44336', ratio: 1 },               // Rojo
+        ],
+        minPixelIntensity: 0,
+        maxPixelIntensity: 50000,
+      };
+
+      const layer = new CSVLayer({
+        url: urlOptions,
+        // title: `Interrupciones ${options.colSui} ${this.meses[options.mes]} de ${options.ano}`,
+        title: `Intensidad de estratificación`,
         copyright: 'DESARROLLADO POR JUAN CAMILO HERRERA - SUPERSERVICIOS',
         popupTemplate: template,
         renderer,

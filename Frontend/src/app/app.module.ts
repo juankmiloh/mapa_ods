@@ -54,6 +54,7 @@ import { ModalPeriodoComponent } from './views/modal-periodo/modal-periodo.compo
 import { ModalEmpresaComponent } from './views/modal-empresa/modal-empresa.component';
 import { ModalCapasComponent } from './views/modal-capas/modal-capas.component';
 import { ModalConsumoComponent } from './views/modal-consumo/modal-consumo.component';
+import { ModalEstratificacionComponent } from './views/modal-estratificacion/modal-estratificacion.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { ModalConsumoComponent } from './views/modal-consumo/modal-consumo.compo
     ModalEmpresaComponent,
     ModalCapasComponent,
     ModalConsumoComponent,
+    ModalEstratificacionComponent,
   ],
   imports: [
     BrowserModule,

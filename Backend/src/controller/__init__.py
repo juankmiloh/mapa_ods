@@ -20,4 +20,5 @@ informe_controller, \
 terceros_controller, \
 interrupciones_controller, \
 notificacion_controller, \
-historico_controller
+historico_controller, \
+estratificacion_controller

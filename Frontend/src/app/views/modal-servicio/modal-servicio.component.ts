@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-modal-servicio',
   templateUrl: './modal-servicio.component.html',
-  styleUrls: ['./modal-servicio.component.scss']
+  styleUrls: ['./modal-servicio.component.scss'],
 })
 export class ModalServicioComponent implements OnInit {
 

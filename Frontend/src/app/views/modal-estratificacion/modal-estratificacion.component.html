@@ -1,15 +1,15 @@
 <div>
     <mat-toolbar color="primary">
         <mat-toolbar-row>
-            <span>Seleccione un sector</span>
+            <span>Seleccione una opción de estratificación</span>
         </mat-toolbar-row>
     </mat-toolbar>
 </div>
-<div class="container-fluid" style="padding-top: 1em; padding-bottom: 1em; border: 0px solid red; text-align: center;">
+<div class="container-fluid" style="padding-top: 1em; padding-bottom: 1em; border: 0px solid red;">
     <mat-divider></mat-divider>
     <mat-selection-list #layers class="select-layers" [(ngModel)]="selectedLayers" [multiple]="false">
         <mat-list-option *ngFor="let layer of typesOfLayers" [value]="layer">
-            {{layer}}
+            <span>{{layer}}</span><mat-icon mat-list-icon>chevron_right</mat-icon>
         </mat-list-option>
     </mat-selection-list>
 

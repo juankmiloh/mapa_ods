@@ -16,6 +16,7 @@ from .terceros_repository import TercerosRepository
 from .interrupciones_repository import InterrupcionesRepository
 from .notificacion_repository import NotificacionRepository
 from .historico_repository import HistoricoRepository
+from .estratificacion_repository import EstratificacionRepository
 
 
 class RepositoryModule(Module):
@@ -38,6 +39,7 @@ class RepositoryModule(Module):
         interrupciones_repository = InterrupcionesRepository(self.db)
         notificacion_repository = NotificacionRepository(self.db)
         historico_repository = HistoricoRepository(self.db)
+        estratificacion_repository = EstratificacionRepository(self.db)
 
         binder.bind(PruebaRepository, to=prueba_repository, scope=singleton)
         binder.bind(EmpresaRepository, to=empresa_repository, scope=singleton)
@@ -54,3 +56,4 @@ class RepositoryModule(Module):
         binder.bind(InterrupcionesRepository, to=interrupciones_repository, scope=singleton)
         binder.bind(NotificacionRepository, to=notificacion_repository, scope=singleton)
         binder.bind(HistoricoRepository, to=historico_repository, scope=singleton)
+        binder.bind(EstratificacionRepository, to=estratificacion_repository, scope=singleton)

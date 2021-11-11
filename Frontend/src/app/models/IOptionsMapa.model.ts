@@ -10,6 +10,7 @@ export interface IOptionsMapa {
   dpto?: number;
   mpio?: number;
   cpoblado?: number;
+  estratoSelect?: number;
 }
 
 export interface IDialogData {
