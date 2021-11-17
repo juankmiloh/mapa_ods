@@ -13,7 +13,7 @@ from .causal_service import CausalService
 from .etapa_service import EtapaService
 from .informe_service import InformeService
 from .terceros_service import TercerosService
-from .interrupciones_service import InterrupcionesService
+from .consumos_service import ConsumosService
 from .notificacion_service import NotificacionService
 from .historico_service import HistoricoService
 from .estratificacion_service import EstratificacionService
@@ -32,7 +32,7 @@ class ServiceModule(Module):
         etapa_service = EtapaService()
         informe_service = InformeService()
         terceros_service = TercerosService()
-        interrupciones_service = InterrupcionesService()
+        consumos_service = ConsumosService()
         notificacion_service = NotificacionService()
         historico_service = HistoricoService()
         estratificacion_service = EstratificacionService()
@@ -49,7 +49,7 @@ class ServiceModule(Module):
         binder.bind(EtapaService, to=etapa_service, scope=singleton)
         binder.bind(InformeService, to=informe_service, scope=singleton)
         binder.bind(TercerosService, to=terceros_service, scope=singleton)
-        binder.bind(InterrupcionesService, to=interrupciones_service, scope=singleton)
+        binder.bind(ConsumosService, to=consumos_service, scope=singleton)
         binder.bind(NotificacionService, to=notificacion_service, scope=singleton)
         binder.bind(HistoricoService, to=historico_service, scope=singleton)
         binder.bind(EstratificacionService, to=estratificacion_service, scope=singleton)

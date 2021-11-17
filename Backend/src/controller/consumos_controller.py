@@ -3,12 +3,12 @@ import json
 from flask import request
 
 from ..controller import controller
-from ..service import InterrupcionesService
-from ..repository import InterrupcionesRepository
+from ..service import ConsumosService
+from ..repository import ConsumosRepository
 from ..util.constants import API_ROOT_PATH
 
-@controller.route(API_ROOT_PATH + 'interrupciones', methods=['GET'])
-def interrupciones(interrupciones_service: InterrupcionesService, interrupciones_repository: InterrupcionesRepository):
+@controller.route(API_ROOT_PATH + 'consumos', methods=['GET'])
+def consumos(consumos_service: ConsumosService, consumos_repository: ConsumosRepository):
     # ARGS
     servicio = request.args.get('servicio', default=0, type=int)
     anio = request.args.get('anio', default=0, type=str)
@@ -18,4 +18,4 @@ def interrupciones(interrupciones_service: InterrupcionesService, interrupciones
     dpto = request.args.get('dpto', default=0, type=str)
     mpio = request.args.get('mpio', default=0, type=str)
     cpoblado = request.args.get('cpoblado', default=0, type=str)
-    return interrupciones_service.get_interrupciones(interrupciones_repository, servicio, anio, mes, empresa, sector, dpto, mpio, cpoblado)
+    return consumos_service.get_consumos(consumos_repository, servicio, anio, mes, empresa, sector, dpto, mpio, cpoblado)

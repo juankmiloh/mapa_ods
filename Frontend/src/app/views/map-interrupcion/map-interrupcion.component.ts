@@ -168,6 +168,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
         this.openSnackBar('Seleccione una empresa', 'oK', 3000);
       } else {
         if (this.empresa.empresa.cod_empresa !== null && this.periodo && this.sector) {
+          const capa = JSON.parse(localStorage.getItem('capas'));
           this.servicio = status;
           const options: IOptionsMapa = {
             servicio: status,
@@ -179,9 +180,18 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
             cpoblado: this.empresa.cpoblado.cod,
             sector: this.sector.option.cod,
           };
-          this.addLayerConsumo(options).then((data) => {
-            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
-          });
+          if (capa.capa === 'consumos') {
+            options['sector'] = capa.option.cod;
+            this.addLayerConsumo(options).then((data) => {
+              this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+            });
+          }
+          if (capa.capa === 'estratificacion') {
+            options['sector'] = capa.option.cod;
+            this.addLayerEstratificacion(options).then((data) => {
+              this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+            });
+          }
         }
       }
     });
@@ -196,6 +206,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       const empresa = JSON.parse(localStorage.getItem('empresa'));
       const periodo = JSON.parse(localStorage.getItem('periodo'));
       if (servicio && empresa && periodo) {
+        const capa = JSON.parse(localStorage.getItem('capas'));
         const options: IOptionsMapa = {
           servicio: servicio.cod_servicio,
           ano: periodo.anio,
@@ -206,9 +217,18 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           cpoblado: empresa.cpoblado.cod,
           sector: status.option.cod,
         };
-        this.addLayerConsumo(options).then((data) => {
-          this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
-        });
+        if (capa.capa === 'consumos') {
+          options['sector'] = capa.option.cod;
+          this.addLayerConsumo(options).then((data) => {
+            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+          });
+        }
+        if (capa.capa === 'estratificacion') {
+          options['sector'] = capa.option.cod;
+          this.addLayerEstratificacion(options).then((data) => {
+            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+          });
+        }
       } else {
         this.openSnackBar('Seleccione un servicio', 'oK', 3000);
         // this.alertSwal.swalOptions = {
@@ -240,9 +260,18 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           cpoblado: this.empresa.cpoblado.cod,
           sector: capa.option.cod,
         };
-        this.addLayerConsumo(options).then((data) => {
-          this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
-        });
+        if (capa.capa === 'consumos') {
+          options['sector'] = capa.option.cod;
+          this.addLayerConsumo(options).then((data) => {
+            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+          });
+        }
+        if (capa.capa === 'estratificacion') {
+          options['sector'] = capa.option.cod;
+          this.addLayerEstratificacion(options).then((data) => {
+            this.view.map.layers = data; // Se agrega un nuevo layer CSV al mapa
+          });
+        }
       } else {
         this.openSnackBar('Seleccione una empresa', 'oK', 3000);
         // this.alertSwal.swalOptions = {
@@ -420,8 +449,8 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
 
     const [CSVLayer] = await loadModules(['esri/layers/CSVLayer']);
     // tslint:disable-next-line: max-line-length
-    // const urlOptions = `${this.serverUrl}/interrupciones?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
-    const urlOptions = `${this.serverUrl}/interrupciones?servicio=${options.servicio}&anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    // const urlOptions = `${this.serverUrl}/consumos?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    const urlOptions = `${this.serverUrl}/consumos?servicio=${options.servicio}&anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
     console.log(urlOptions);
     this.dataCSV = d3.csv(urlOptions);
 
@@ -449,7 +478,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       // * latitude - latitud municipio
       // * cod_dane - codigo dane municipio
       // * cod_empresa - empresa del municipio
-      // * total - total de horas de interrupciones
+      // * total - total de horas de consumos
 
       let medida = null;
       if (options.servicio === 4) {
@@ -520,8 +549,8 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
 
     const [CSVLayer] = await loadModules(['esri/layers/CSVLayer']);
     // tslint:disable-next-line: max-line-length
-    // const urlOptions = `${this.serverUrl}/interrupciones?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
-    const urlOptions = `${this.serverUrl}/estratificacion?servicio=${options.servicio}&anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    // const urlOptions = `${this.serverUrl}/consumos?anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&sector=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
+    const urlOptions = `${this.serverUrl}/estratificacion?servicio=${options.servicio}&anio=${options.ano}&mes=${options.mes}&empresa=${options.empresa}&opcion=${options.sector}&dpto=${options.dpto}&mpio=${options.mpio}&cpoblado=${options.cpoblado}`;
     console.log(urlOptions);
     this.dataCSV = d3.csv(urlOptions);
 
@@ -549,20 +578,13 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       // * latitude - latitud municipio
       // * cod_dane - codigo dane municipio
       // * cod_empresa - empresa del municipio
-      // * total - total de horas de interrupciones
-
-      let medida = null;
-      if (options.servicio === 4) {
-        medida = 'kwh';
-      } else if (options.servicio === 5) {
-        medida = 'm3';
-      }
+      // * total - total de horas de consumos
 
       const template = {
         // tslint:disable-next-line: max-line-length
         title:  '<div style="border: 0px solid black; background: #e3f2fd; width: 15em; border-radius: 5px; height: 4em; padding-top: 0.3em;">' +
-                '  <small style="color: #3f51b5; font-size: x-small;"><b>{dane_nom_poblad}</b></small><br>' +
-                `  <small style="color: #212121; padding-left: 3%;">Total estratos {cantidad_estratos}</small>` +
+                '  <small style="color: #3f51b5; font-size: x-small;"><b>{dane_nom_poblad} <span style="text-decoration: underline #f44336; color: #f44336;">ESTRATO {estrato}</span></b></small><br>' +
+                `  <small style="color: #212121; padding-left: 3%; font-size: small;">Cantidad estratos SUI: {cantidad_estratos_sui} - Alcaldía: {cantidad_estratos_alcaldia}</small>` +
                 '</div>',
         content: '<div>' +
                  ' <small>{nom_empresa}</small><br>' +
@@ -576,7 +598,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       // from the continuous color ramp in the colorStops property
       const renderer = {
         type: 'heatmap',
-        field: `cantidad_estratos`,
+        field: `cantidad_estratos_sui`,
         colorStops: [
           { color: 'rgba(63, 40, 102, 0)', ratio: 0 }, // rango de 0 a 1
           { color: '#6300df', ratio: 0.083 },          // Azul claro
@@ -597,7 +619,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
       const layer = new CSVLayer({
         url: urlOptions,
         // title: `Interrupciones ${options.colSui} ${this.meses[options.mes]} de ${options.ano}`,
-        title: `Intensidad de estratificación`,
+        title: `Intensidad estratificación`,
         copyright: 'DESARROLLADO POR JUAN CAMILO HERRERA - SUPERSERVICIOS',
         popupTemplate: template,
         renderer,

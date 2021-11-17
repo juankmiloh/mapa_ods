@@ -18,7 +18,7 @@ causal_controller, \
 etapa_controller, \
 informe_controller, \
 terceros_controller, \
-interrupciones_controller, \
+consumos_controller, \
 notificacion_controller, \
 historico_controller, \
 estratificacion_controller

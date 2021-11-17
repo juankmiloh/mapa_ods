@@ -13,7 +13,7 @@ from .causal_repository import CausalRepository
 from .etapa_repository import EtapaRepository
 from .informe_repository import InformeRepository
 from .terceros_repository import TercerosRepository
-from .interrupciones_repository import InterrupcionesRepository
+from .consumos_repository import ConsumosRepository
 from .notificacion_repository import NotificacionRepository
 from .historico_repository import HistoricoRepository
 from .estratificacion_repository import EstratificacionRepository
@@ -36,7 +36,7 @@ class RepositoryModule(Module):
         etapa_repository = EtapaRepository(self.db)
         informe_repository = InformeRepository(self.db)
         terceros_repository = TercerosRepository(self.db)
-        interrupciones_repository = InterrupcionesRepository(self.db)
+        consumos_repository = ConsumosRepository(self.db)
         notificacion_repository = NotificacionRepository(self.db)
         historico_repository = HistoricoRepository(self.db)
         estratificacion_repository = EstratificacionRepository(self.db)
@@ -53,7 +53,7 @@ class RepositoryModule(Module):
         binder.bind(EtapaRepository, to=etapa_repository, scope=singleton)
         binder.bind(InformeRepository, to=informe_repository, scope=singleton)
         binder.bind(TercerosRepository, to=terceros_repository, scope=singleton)
-        binder.bind(InterrupcionesRepository, to=interrupciones_repository, scope=singleton)
+        binder.bind(ConsumosRepository, to=consumos_repository, scope=singleton)
         binder.bind(NotificacionRepository, to=notificacion_repository, scope=singleton)
         binder.bind(HistoricoRepository, to=historico_repository, scope=singleton)
         binder.bind(EstratificacionRepository, to=estratificacion_repository, scope=singleton)

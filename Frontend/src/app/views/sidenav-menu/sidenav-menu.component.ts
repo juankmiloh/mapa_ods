@@ -112,10 +112,12 @@ export class SidenavMenuComponent {
             this.options[3].select = dataFromModal.value.capa; // Se muestra msj de la opcion seleccionada
             this.options[4]['hidden'] = false; // Se habilita en la lista del menu LATERAL la opcion de PERIODO
             if (dataFromModal.value.capa === 'consumos') {
-              this.usuariosConsumo = dataFromModal.value.option.nombre;
+              this.usuariosConsumo = dataFromModal.value.option.nombre; // Cambia el mensaje del header de tipo de usuarios (Res/NoRes)
               this.observer.setChangeSector(dataFromModal.value);
             } else if (dataFromModal.value.capa === 'estratificacion') {
               console.log('Selecciono estratificacion!');
+              this.usuariosConsumo = dataFromModal.value.option.nombre; // Cambia el mensaje del header tipo de opc de estrato seleccionado
+              this.observer.setChangeSector(dataFromModal.value);
             }
           } else if (dataFromModal.modal === 'periodo') {
             localStorage.setItem('periodo', JSON.stringify(dataFromModal.value));
