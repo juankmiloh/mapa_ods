@@ -56,10 +56,10 @@ export const LIST_SIDENAV = [
     // {
     //     name: 'divider',
     // },
-    {
-        name: 'Usuarios',
-        icon: 'people_alt',
-    },
+    // {
+    //     name: 'Usuarios',
+    //     icon: 'people_alt',
+    // },
     {
         name: 'divider',
     },
