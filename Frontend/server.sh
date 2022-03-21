@@ -1,4 +1,6 @@
 #!/bin/bash
-# echo run server mapa de interrupciones
+# echo run server mapa de ODS
 # -- COMANDOS PARA LEVANTAR SERVIDOR
-ng serve --host 172.16.32.13 --port 5064
+# source ~/.bashrc # Comando para actualizar la configuracion de nvm
+# nvm use v14.18.2 # Comando para indicar la version de node a utilizar
+ng serve --port 5059
