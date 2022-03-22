@@ -21,6 +21,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   cpoblado: any;
   sector: any;
   servicio: any;
+  x: MediaQueryList;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -54,6 +55,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
   mode: ProgressSpinnerMode = 'determinate';
 
   async ngOnInit() {
+    this.x = window.matchMedia('(max-width: 800px)'); // Si hace match con dispositivos móviles
     this.validateChangePeriodo();
     this.validateChangeBasemap();
     this.validateChangeEmpresa();
@@ -77,7 +79,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
     // console.log('MES ACTUAL: ', mesActual);
     // opciones iniciales del mapa a visualizar
     this.options = {
-      zoom: 5,
+      zoom: this.x.matches ? 4 : 5,
       latitud: 3.5,
       longitud: -71.47106040285713,
     };
@@ -159,7 +161,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
           this.view.container = null; // destroy the map view
         }
         this.options = {
-          zoom: 5,
+          zoom: this.x.matches ? 4 : 5,
           latitud: 3.5,
           longitud: -71.47106040285713,
         };

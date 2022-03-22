@@ -11,11 +11,11 @@ from ..util.constants import API_ROOT_PATH
 def consumos(consumos_service: ConsumosService, consumos_repository: ConsumosRepository):
     # ARGS
     servicio = request.args.get('servicio', default=0, type=int)
-    anio = request.args.get('anio', default=0, type=str)
-    mes = request.args.get('mes', default=0, type=str)
-    empresa = request.args.get('empresa', default=0, type=str)
-    sector = request.args.get('sector', default=0, type=str)
-    dpto = request.args.get('dpto', default=0, type=str)
-    mpio = request.args.get('mpio', default=0, type=str)
-    cpoblado = request.args.get('cpoblado', default=0, type=str)
+    anio = request.args.get('anio', default=0, type=int)
+    mes = request.args.get('mes', default=0, type=int)
+    empresa = request.args.get('empresa', default=0, type=int)
+    sector = request.args.get('sector', default=0, type=int)
+    dpto = request.args.get('dpto', default='TODOS', type=str)
+    mpio = request.args.get('mpio', default='TODOS', type=str)
+    cpoblado = request.args.get('cpoblado', default='TODOS', type=str)
     return consumos_service.get_consumos(consumos_repository, servicio, anio, mes, empresa, sector, dpto, mpio, cpoblado)

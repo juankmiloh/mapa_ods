@@ -1,6 +1,6 @@
 <!-- Se limita la vista para que no permita arrastar ni copiar texto -->
 <mat-sidenav-container class="sidenav-container" [hasBackdrop]="false" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
-    <mat-sidenav #sidenav mode="side" class="sidenav" (keydown.escape)="close('na')" disableClose opened="true">
+    <mat-sidenav #sidenav mode="side" class="sidenav" (keydown.escape)="close('na')" disableClose [opened]="x.matches ? false : true">
         <!-- Content nav lateral -->
         <mat-toolbar>
             <div>
@@ -44,12 +44,12 @@
             <button  type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sidenav.toggle()">
 				<mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
-            <span *ngIf="empresa === 'OBJETIVOS DE DESARROLLO SOSTENIBLE'" style="padding-left: 1%;">{{ empresa }}</span>
-            <span *ngIf="empresa !== 'OBJETIVOS DE DESARROLLO SOSTENIBLE'" style="color: black; background: #ffe0b2; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ empresa }}</span>
-            <span *ngIf="empresa !== 'OBJETIVOS DE DESARROLLO SOSTENIBLE' && usuariosConsumo" style="color: black; background: #f0f4c3; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ usuariosConsumo | uppercase }}</span>
-            <span *ngIf="depto" style="color: black; background: #fff9c4; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ depto }}</span>
-            <span *ngIf="mpio" style="color: black; background: #ffecb3; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ mpio }}</span>
-            <span *ngIf="cpoblado" style="color: black; background: #c8e6c9; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ cpoblado }}</span>
+            <span *ngIf="empresa === 'OBJETIVOS DE DESARROLLO SOSTENIBLE'" style="padding-left: 1%;" [style]="{fontSize: x.matches ? 'small' : ''}">{{ empresa }}</span>
+            <span *ngIf="empresa !== 'OBJETIVOS DE DESARROLLO SOSTENIBLE'" [style]="{fontSize: x.matches ? 'xx-small' : 'small'}" style="color: black; background: #ffe0b2; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ empresa }}</span>
+            <span *ngIf="empresa !== 'OBJETIVOS DE DESARROLLO SOSTENIBLE' && usuariosConsumo" [style]="{fontSize: x.matches ? 'xx-small' : 'small'}" style="color: black; background: #f0f4c3; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ usuariosConsumo | uppercase }}</span>
+            <span *ngIf="depto" [style]="{fontSize: x.matches ? 'xx-small' : 'small'}" style="color: black; background: #fff9c4; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ depto }}</span>
+            <span *ngIf="mpio" [style]="{fontSize: x.matches ? 'xx-small' : 'small'}" style="color: black; background: #ffecb3; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ mpio }}</span>
+            <span *ngIf="cpoblado" [style]="{fontSize: x.matches ? 'xx-small' : 'small'}" style="color: black; background: #c8e6c9; border-radius: 15px; text-align: center; font-weight: 500; font-size: small; padding-left: 2%; padding-right: 2%; margin-left: 1%;">{{ cpoblado }}</span>
         </mat-toolbar>
         <!-- Add Content Here -->
         <router-outlet></router-outlet>

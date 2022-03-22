@@ -30,8 +30,17 @@ def home_apiv1(path):
 
     return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
 
-@controller.route('front/dist/map-page', methods=['GET'], defaults={'path': ''})
+@controller.route('ods/front/dist/', methods=['GET'], defaults={'path': ''})
 def home_apiv2(path):
+    script_root  = request.script_root
+    
+    if script_root :
+        script_root += "/"
+
+    return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
+
+@controller.route('front/dist/map-page', methods=['GET'], defaults={'path': ''})
+def home_apiv3(path):
     script_root  = request.script_root
     
     if script_root :
