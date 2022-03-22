@@ -40,7 +40,7 @@ def home_apiv2(path):
     return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
 
 @controller.route('ods/', methods=['GET'], defaults={'path': ''})
-def home_apiv2(path):
+def home_apiv3(path):
     script_root  = request.script_root
     
     if script_root :
@@ -49,7 +49,7 @@ def home_apiv2(path):
     return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
 
 @controller.route('front/dist/map-page', methods=['GET'], defaults={'path': ''})
-def home_apiv3(path):
+def home_apiv4(path):
     script_root  = request.script_root
     
     if script_root :

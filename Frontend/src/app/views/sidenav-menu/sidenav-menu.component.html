@@ -1,14 +1,14 @@
 <!-- Se limita la vista para que no permita arrastar ni copiar texto -->
 <mat-sidenav-container class="sidenav-container" [hasBackdrop]="false" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
-    <mat-sidenav #sidenav mode="side" class="sidenav" (keydown.escape)="close('na')" disableClose [opened]="x.matches ? false : true">
+    <mat-sidenav #sidenav style="border: 0px solid red;" mode="side" class="sidenav" (keydown.escape)="close('na')" disableClose [opened]="x.matches ? false : true">
         <!-- Content nav lateral -->
-        <mat-toolbar>
+        <mat-toolbar style="border: 0px solid red;">
             <div>
                 <img src="assets/img/logo_sm.jpg" class='imgSmRedonda'>
             </div>
             <label style="padding-left: 6%;"><span style="color: #303F9F;">Superservicios - ODS</span></label>
         </mat-toolbar>
-        <mat-selection-list #items [multiple]="false">
+        <mat-selection-list #items [multiple]="false" style="border: 0px solid red;">
             <span *ngFor="let option of options">
                 <span *ngIf="option.name === 'divider'">
                     <mat-divider></mat-divider>
@@ -36,6 +36,11 @@
         <!-- <p>
         Option selected: {{items.selectedOptions.selected[0]?.value.name}}
         </p> -->
+        <div class="footer-login">
+            <span class="textoFooter">
+              ::. . SUIEYG v2.1 ©&nbsp;2022 . .::
+            </span>
+        </div>
     </mat-sidenav>
 
     <mat-sidenav-content>
