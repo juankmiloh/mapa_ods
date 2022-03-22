@@ -31,7 +31,7 @@ def home_apiv1(path):
     return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
 
 @controller.route('front/dist/map-page', methods=['GET'], defaults={'path': ''})
-def home_apiv1(path):
+def home_apiv2(path):
     script_root  = request.script_root
     
     if script_root :
