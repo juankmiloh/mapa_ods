@@ -1,6 +1,6 @@
 <!-- Se limita la vista para que no permita arrastar ni copiar texto -->
-<mat-sidenav-container class="sidenav-container" [hasBackdrop]="false" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
-    <mat-sidenav #sidenav style="border: 0px solid red;" mode="side" class="sidenav" (keydown.escape)="close('na')" disableClose [opened]="x.matches ? false : true">
+<mat-sidenav-container class="sidenav-container" [hasBackdrop]="x.matches ? true : false" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+    <mat-sidenav #sidenav style="border: 0px solid red;" mode="side" class="sidenav" (keydown.escape)="close('na')" [disableClose]="x.matches ? false : true" [opened]="x.matches ? false : true">
         <!-- Content nav lateral -->
         <mat-toolbar style="border: 0px solid red;">
             <div>
