@@ -18,8 +18,8 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "outputPath": "../Backend/front/dist",
-                        "baseHref": "/front/dist/",
-                        "deployUrl": "/front/dist/",
+                        "baseHref": "/ods/front/dist/",
+                        "deployUrl": "/ods/front/dist/",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -76,8 +76,8 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
                         "browserTarget": "ciad-platform:build",
-                        "baseHref": "/front/dist/",
-                        "deployUrl": "/front/dist/",
+                        "baseHref": "/ods/front/dist/",
+                        "deployUrl": "/ods/front/dist/",
                         "hmrWarning": false
                         // "ssl": true,
                         // "sslCert": "ssl/ip_pruebas_otic/server.crt",
@@ -86,8 +86,8 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "ciad-platform:build:production",
-                            "baseHref": "/front/dist/",
-                            "deployUrl": "/front/dist/",
+                            "baseHref": "/ods/front/dist/",
+                            "deployUrl": "/ods/front/dist/",
                             "hmrWarning": false
                         }
                     }
