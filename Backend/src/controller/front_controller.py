@@ -10,7 +10,7 @@ def home(path):
     if script_root :
         script_root += "/"
 
-    return render_template("dist/index.html", url_base=script_root + "front/dist")
+    return render_template("dist/index.html", url_base=script_root + "ods/front/dist")
 
 @controller.route('/map-page', methods=['GET'], defaults={'path': ''})
 def home_api(path):
@@ -19,7 +19,7 @@ def home_api(path):
     if script_root :
         script_root += "/"
 
-    return render_template("dist/index.html", url_base=script_root + "front/dist" )
+    return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
 
 @controller.route('/front/dist/map-page/', methods=['GET'], defaults={'path': ''})
 def home_apiv1(path):
@@ -28,4 +28,4 @@ def home_apiv1(path):
     if script_root :
         script_root += "/"
 
-    return render_template("dist/index.html", url_base=script_root + "front/dist" )
+    return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
