@@ -21,7 +21,7 @@ def home_api(path):
 
     return render_template("dist/index.html", url_base=script_root + "ods/front/dist" )
 
-@controller.route('/front/dist/map-page/', methods=['GET'], defaults={'path': ''})
+@controller.route('ods/front/dist/map-page/', methods=['GET'], defaults={'path': ''})
 def home_apiv1(path):
     script_root  = request.script_root
     
