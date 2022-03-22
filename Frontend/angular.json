@@ -17,7 +17,9 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/ciad-platform",
+                        "outputPath": "../Backend/front/dist",
+                        "baseHref": "/front/dist/",
+                        "deployUrl": "/front/dist/",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -41,10 +43,12 @@
                     },
                     "configurations": {
                         "production": {
-                            "fileReplacements": [{
-                                "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.prod.ts"
-                            }],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
@@ -53,9 +57,10 @@
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true,
-                            "budgets": [{
+                            "budgets": [
+                                {
                                     "type": "initial",
-                                    "maximumWarning": "2mb",
+                                    "maximumWarning": "3mb",
                                     "maximumError": "5mb"
                                 },
                                 {
@@ -71,13 +76,19 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
                         "browserTarget": "ciad-platform:build",
+                        "baseHref": "/front/dist/",
+                        "deployUrl": "/front/dist/",
+                        "hmrWarning": false
                         // "ssl": true,
                         // "sslCert": "ssl/ip_pruebas_otic/server.crt",
                         // "sslKey": "ssl/ip_pruebas_otic/server.key"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "ciad-platform:build:production"
+                            "browserTarget": "ciad-platform:build:production",
+                            "baseHref": "/front/dist/",
+                            "deployUrl": "/front/dist/",
+                            "hmrWarning": false
                         }
                     }
                 },
