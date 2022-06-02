@@ -9,6 +9,10 @@
             <label style="padding-left: 6%;"><span style="color: #303F9F;">Superservicios - ODS</span></label>
         </mat-toolbar>
         <mat-selection-list #items [multiple]="false" style="border: 0px solid red;">
+            <mat-list-item routerLink="/home" (click)="close('SDEGC | Superservicios')" [routerLinkActive]="['is-active']">
+                <mat-icon aria-label="Side nav toggle icon">home</mat-icon>
+                <span style="padding-left: 3%;">Principal</span>
+            </mat-list-item>
             <span *ngFor="let option of options">
                 <span *ngIf="option.name === 'divider'">
                     <mat-divider></mat-divider>

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  serverUrl: 'http://dieg.superservicios.gov.co/ods/ods/api',
+  serverUrl: 'http://localhost:5000/mapaods/api',
 };
