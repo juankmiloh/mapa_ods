@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 from src import create_app
-from flask import render_template, redirect, url_for
+from flask import render_template
 from flask_script import Manager
 
 app = create_app()

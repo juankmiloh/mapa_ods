@@ -8,16 +8,25 @@ PASOS PARA CONFIGURAR DEPLOY DE UNA APP ANGULAR EN UN SERVIDOR APACHE
     "baseHref": "/ods/static/", -- Configuración del servidor de la SSPD
     "baseHref": "/static/", -- Configuración del servidor local (localhost)
 ------------------------------------------------------------------------------------------------------------------
-"deployUrl": "/ods/front/dist/", -- Configurar las URL de los archivos (css / js) en el index [No fue necesario]
+    "deployUrl": "/ods/front/dist/", -- Configurar las URL de los archivos (css / js) en el index [No fue necesario]
 ------------------------------------------------------------------------------------------------------------------
 2 -- Configurar las rutas en el app-routing de angular - Anexar las rutas definidas en el servidor APACHE como una redirección de vista
 ------------------------------------------------------------------------------------------------------------------
-3 -- Generar el proyecto productivo [build] de angular
+------------------------------------------------------------------------------------------------------------------
+3 -- Configurar la URL del ambientes de desarrollo productivo (environment.prod.ts) (Agregar la ruta por la cual se pone a correr el proyecto en el PROXY de APACHE)
+------------------------------------------------------------------------------------------------------------------
+4 -- Si aparece el siguiente mensaje:
+    WARNING in Exceeded maximum budget for D:/superservicios/proyectos/mapa_interrupciones/Frontend/src/app/views/home/home.component.scss. Budget 6 kB was not met by 133 bytes with a total of 6.13 kB.
+  -- Modificar este valor en el angular.json como se muestra a continuación:
+    "maximumWarning": "6kb", ----> "maximumWarning": "1mb",
+------------------------------------------------------------------------------------------------------------------
+4 -- Generar el proyecto productivo [build] de angular
 ------------------------------------------------------------------------------------------------------------------
     ng build --prod
 ------------------------------------------------------------------------------------------------------------------
-4 -- Una vez generados los archivos sacar el index a la raíz de la carpeta dist (carpeta Backend)(Python)
+5 -- Una vez generados los archivos sacar el index a la raíz de la carpeta dist (carpeta Backend)(Python)
 ------------------------------------------------------------------------------------------------------------------
-5 -- Configurar las rutas en front-controller de python
+6 -- Configurar las rutas en front-controller de python
 ------------------------------------------------------------------------------------------------------------------
-6 -- Configurar el controlador de rutas 404 NOT FOUND de python
+7 -- Configurar el controlador de rutas 404 NOT FOUND de python (app.py) (page_not_found) (errorhandler)
+------------------------------------------------------------------------------------------------------------------
