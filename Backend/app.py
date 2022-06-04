@@ -1,10 +1,18 @@
 #!/usr/bin/env python
 import os
 from src import create_app
+from flask import render_template, redirect, url_for
 from flask_script import Manager
 
 app = create_app()
 manager = Manager(app)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    print("--------- ERROR ---------------------------")
+    print(e)
+    print("------------------------------------")
+    return render_template('index.html'), 404
 
 @manager.command
 def test():

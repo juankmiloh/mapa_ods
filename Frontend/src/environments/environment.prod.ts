@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  serverUrl: 'http://localhost:5000/mapaods/api',
+  serverUrl: 'http://tvi.superservicios.gov.co/ods/mapaods/api',
 };

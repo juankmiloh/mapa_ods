@@ -6,8 +6,6 @@ export const environment = {
   production: false,
   // server dev
   serverUrl: 'http://localhost:5000/mapaods/api',
-  // server produccion
-  // serverUrl: 'http://172.16.32.13:5055',
 };
 
 /*
