@@ -10,6 +10,6 @@ def home():
 def static_redirect():
     return render_template('index.html')
 
-@controller.route('/ods')
+@controller.route('/ods/&gtjwt')
 def static_redirect():
     return render_template('index.html')
