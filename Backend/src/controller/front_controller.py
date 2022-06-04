@@ -9,3 +9,7 @@ def home():
 @controller.route('/static')
 def static_redirect():
     return render_template('index.html')
+
+@controller.route('/ods')
+def static_redirect():
+    return render_template('index.html')
