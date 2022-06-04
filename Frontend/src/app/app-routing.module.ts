@@ -7,6 +7,7 @@ import { MapInterrupcionComponent } from './views/map-interrupcion/map-interrupc
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'map-page', component: MapInterrupcionComponent },
+  { path: 'ods', redirectTo: '/map-page', pathMatch: 'full' },
   { path: 'ods/&gtjwt', redirectTo: '/map-page', pathMatch: 'full' },
   { path: '', redirectTo: '/map-page', pathMatch: 'full' },
 ];
