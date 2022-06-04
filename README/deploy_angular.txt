@@ -1,4 +1,23 @@
--- Línea de código para definir URL por la cual se cargaran los archivos necesarios para renderizar el index.html
-"baseHref": "/ods/static/", -- Configuración del servidor de la SSPD
-"baseHref": "/static/", -- Configuración del servidor local (localhost)
-"deployUrl": "/ods/front/dist/",
+------------------------------------------------------------------------------------------------------------------
+PASOS PARA CONFIGURAR DEPLOY DE UNA APP ANGULAR EN UN SERVIDOR APACHE
+------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+1 -- Línea de código para definir URL por la cual se cargaran los archivos necesarios para renderizar el index.html
+  -- Configurar en el archivo "angular.json"
+------------------------------------------------------------------------------------------------------------------
+    "baseHref": "/ods/static/", -- Configuración del servidor de la SSPD
+    "baseHref": "/static/", -- Configuración del servidor local (localhost)
+------------------------------------------------------------------------------------------------------------------
+"deployUrl": "/ods/front/dist/", -- Configurar las URL de los archivos (css / js) en el index [No fue necesario]
+------------------------------------------------------------------------------------------------------------------
+2 -- Configurar las rutas en el app-routing de angular - Anexar las rutas definidas en el servidor APACHE como una redirección de vista
+------------------------------------------------------------------------------------------------------------------
+3 -- Generar el proyecto productivo [build] de angular
+------------------------------------------------------------------------------------------------------------------
+    ng build --prod
+------------------------------------------------------------------------------------------------------------------
+4 -- Una vez generados los archivos sacar el index a la raíz de la carpeta dist (carpeta Backend)(Python)
+------------------------------------------------------------------------------------------------------------------
+5 -- Configurar las rutas en front-controller de python
+------------------------------------------------------------------------------------------------------------------
+6 -- Configurar el controlador de rutas 404 NOT FOUND de python
