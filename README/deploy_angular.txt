@@ -1,0 +1,4 @@
+-- Línea de código para definir URL por la cual se cargaran los archivos necesarios para renderizar el index.html
+"baseHref": "/ods/static/", -- Configuración del servidor de la SSPD
+"baseHref": "/static/", -- Configuración del servidor local (localhost)
+"deployUrl": "/ods/front/dist/",
