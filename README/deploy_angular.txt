@@ -30,3 +30,9 @@ PASOS PARA CONFIGURAR DEPLOY DE UNA APP ANGULAR EN UN SERVIDOR APACHE
 ------------------------------------------------------------------------------------------------------------------
 7 -- Configurar el controlador de rutas 404 NOT FOUND de python (app.py) (page_not_found) (errorhandler)
 ------------------------------------------------------------------------------------------------------------------
+8 -- Configurar la ruta static y el template de python
+  app = Flask(__name__,
+                static_folder="../front/dist/static",
+                template_folder="../front/dist"
+                )
+------------------------------------------------------------------------------------------------------------------
