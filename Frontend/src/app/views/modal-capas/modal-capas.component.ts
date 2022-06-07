@@ -14,7 +14,8 @@ export class ModalCapasComponent implements OnInit {
   @ViewChild('layers') listLayers: MatSelectionList;
 
   selectedLayers: string[]; // this array will contain the selected layers
-  typesOfLayers: string[] = ['Consumos', 'Estratificación', 'Calidad del servicio'];
+  // typesOfLayers: string[] = ['Consumos', 'Estratificación', 'Calidad del servicio'];
+  typesOfLayers: string[] = ['Consumos', 'Estratificación'];
   bottomSheetRef: any; // modal tipos de usuario
   @ViewChild('layers') listSidenav: MatSelectionList;
 
