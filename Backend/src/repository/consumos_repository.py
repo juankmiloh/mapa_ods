@@ -6,8 +6,12 @@ class ConsumosRepository:
         self.db = db
 
     def get_consumos_bd(self, servicio, anio, mes, empresa, sector, dpto, mpio, cpoblado):
+        if dpto == 'TODOS':
+            dpto = -1
+        if mpio == 'TODOS':
+            mpio = -1
         
-        print('SERVICIO --> ', servicio)
+        # print('SERVICIO --> ', servicio)
         sql = '''
             SELECT T.CAR_CARG_ANO, T.CAR_CARG_PERIODO
             , T.COD_DANE, GIS.DANE_NOM_DPTO, GIS.DANE_NOM_MPIO, GIS.DANE_NOM_POBLAD, GIS.LONGITUD, GIS.LATITUD
@@ -24,8 +28,8 @@ class ConsumosRepository:
                     AND C.SUM_CON_ANO = :ANIO_ARG --ANIO (REMPLAZAR EL 2021 POR LA VARIABLE DEL FRONT)
                     AND C.SUM_CON_PERIODO = :MES_ARG --MES (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
                     AND (C.IDENTIFICADOR_EMPRESA = :EMPRESA_ARG OR 0 = :EMPRESA_ARG) --ID_ESP (REMPLAZAR EL 564 POR LA VARIABLE DEL FRONT)
-                    AND (C.SUM_CON_DEPTO = :DPTO_ARG OR 'TODOS' = :DPTO_ARG) --CODDEPTO (REMPLAZAR EL 5 POR LA VARIABLE DEL FRONT)
-                    AND (C.SUM_CON_MUNICIPIO = :MPO_ARG OR 'TODOS' = :MPO_ARG) --CODMPIO (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
+                    AND (C.SUM_CON_DEPTO = :DPTO_ARG OR -1 = :DPTO_ARG) --CODDEPTO (REMPLAZAR EL 5 POR LA VARIABLE DEL FRONT)
+                    AND (C.SUM_CON_MUNICIPIO = :MPO_ARG OR -1 = :MPO_ARG) --CODMPIO (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
                     AND (CASE WHEN C.SUM_CON_ESTRATO BETWEEN 1 AND 6 THEN 1 ELSE 2 END) = :SECTOR_ARG --1= RESIDENCIAL; 2=NO RESIDENCIAL; (REMPLAZAR EL 1 POR LA VARIABLE DEL FRONT)
                 ) T
                 INNER JOIN RUPS.ARE_ESP_EMPRESAS ESP ON T.ID_COMER=ESP.ARE_ESP_SECUE
