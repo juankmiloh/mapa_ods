@@ -7,3 +7,4 @@ pandas>=0.24.1
 pyPika>=0.34.0
 Werkzeug==1.0.1
 cx_Oracle
+psycopg2-binary

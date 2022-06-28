@@ -24,6 +24,23 @@ export class SuiService {
     });
   }
 
+  getVisitas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.serverUrl}/visitas`).pipe(
+      tap((data) => {
+        // console.log(data);
+      }), catchError(this.handleError),
+      );
+  }
+
+  setVisita(model: any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.serverUrl}/visitas`, model).pipe(
+      tap((data) => {
+        // console.log('DATA desde service -> ', JSON.stringify(data))
+      }),
+      catchError(this.handleError)
+    );
+  }
+  
   getAnios(): Observable<any[]> {
     return this.http.get<any[]>(`${this.serverUrl}/anios`).pipe(
       tap((data) => {

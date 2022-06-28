@@ -61,6 +61,11 @@ export const LIST_SIDENAV = [
     //     icon: 'people_alt',
     // },
     {
+        name: 'Visitas',
+        icon: 'people_alt',
+        select: ''
+    },
+    {
         name: 'divider',
     },
     {

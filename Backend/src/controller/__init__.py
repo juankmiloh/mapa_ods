@@ -21,4 +21,5 @@ terceros_controller, \
 consumos_controller, \
 notificacion_controller, \
 historico_controller, \
-estratificacion_controller
+estratificacion_controller, \
+visitas_controller

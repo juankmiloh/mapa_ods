@@ -7,6 +7,7 @@ from flask_injector import FlaskInjector
 from flask_cors import CORS
 from injector import Module, Injector, singleton
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
 
 from .service import ServiceModule
 from .repository import RepositoryModule
@@ -19,8 +20,9 @@ Base = declarative_base()
 
 
 class AppModule(Module):
-    def __init__(self, db):
+    def __init__(self, db, postgresdb):
         self.db = db
+        self.postgresdb = postgresdb
 
     def configure(self, binder):
         binder.bind(SQLAlchemy, to=self.db, scope=singleton)
@@ -35,10 +37,12 @@ def create_app():
                 )
     app.config.from_object('config_' + config_name)
 
+    postgresdb = create_engine(app.config.get("SQLALCHEMY_DATABASE_POSTGRES_URI")).connect()
+
     db = SQLAlchemy()
     db.init_app(app)
 
-    injector = Injector([AppModule(db), RepositoryModule(db), ServiceModule()])
+    injector = Injector([AppModule(db, postgresdb), RepositoryModule(db, postgresdb), ServiceModule()])
 
     from .controller import controller as controller_blueprint
     app.register_blueprint(controller_blueprint)

@@ -17,11 +17,13 @@ from .consumos_repository import ConsumosRepository
 from .notificacion_repository import NotificacionRepository
 from .historico_repository import HistoricoRepository
 from .estratificacion_repository import EstratificacionRepository
+from .visitas_repository import VisitasRepository
 
 
 class RepositoryModule(Module):
-    def __init__(self, db):
+    def __init__(self, db, postgresdb):
         self.db = db
+        self.postgresdb = postgresdb
 
     def configure(self, binder):
         prueba_repository = PruebaRepository(self.db)
@@ -40,6 +42,7 @@ class RepositoryModule(Module):
         notificacion_repository = NotificacionRepository(self.db)
         historico_repository = HistoricoRepository(self.db)
         estratificacion_repository = EstratificacionRepository(self.db)
+        visitas_repository = VisitasRepository(self.postgresdb)
 
         binder.bind(PruebaRepository, to=prueba_repository, scope=singleton)
         binder.bind(EmpresaRepository, to=empresa_repository, scope=singleton)
@@ -57,3 +60,4 @@ class RepositoryModule(Module):
         binder.bind(NotificacionRepository, to=notificacion_repository, scope=singleton)
         binder.bind(HistoricoRepository, to=historico_repository, scope=singleton)
         binder.bind(EstratificacionRepository, to=estratificacion_repository, scope=singleton)
+        binder.bind(VisitasRepository, to=visitas_repository, scope=singleton)

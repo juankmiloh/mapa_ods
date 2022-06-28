@@ -17,6 +17,7 @@ from .consumos_service import ConsumosService
 from .notificacion_service import NotificacionService
 from .historico_service import HistoricoService
 from .estratificacion_service import EstratificacionService
+from .visitas_service import VisitasService
 
 class ServiceModule(Module):
     def configure(self, binder):
@@ -36,6 +37,7 @@ class ServiceModule(Module):
         notificacion_service = NotificacionService()
         historico_service = HistoricoService()
         estratificacion_service = EstratificacionService()
+        visitas_service = VisitasService()
 
         binder.bind(PruebaService, to=prueba_service, scope=singleton)
         binder.bind(EmpresaService, to=empresa_service, scope=singleton)
@@ -53,3 +55,4 @@ class ServiceModule(Module):
         binder.bind(NotificacionService, to=notificacion_service, scope=singleton)
         binder.bind(HistoricoService, to=historico_service, scope=singleton)
         binder.bind(EstratificacionService, to=estratificacion_service, scope=singleton)
+        binder.bind(VisitasService, to=visitas_service, scope=singleton)

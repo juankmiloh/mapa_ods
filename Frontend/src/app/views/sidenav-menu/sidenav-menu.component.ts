@@ -2,8 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectionList } from '@angular/material/list';
 import { LIST_SIDENAV } from 'src/app/constants/constants';
-import { Section } from 'src/app/models/IOptionsMapa.model';
+import { ISUIError, Section, Visitas } from 'src/app/models/IOptionsMapa.model';
 import { AppObservableService } from 'src/app/services/app-observable.service';
+import { SuiService } from 'src/app/services/sui.service';
 import { ModalCapasComponent } from '../modal-capas/modal-capas.component';
 import { ModalEmpresaComponent } from '../modal-empresa/modal-empresa.component';
 import { ModalPeriodoComponent } from '../modal-periodo/modal-periodo.component';
@@ -27,6 +28,7 @@ export class SidenavMenuComponent {
   constructor(
     public dialog: MatDialog,
     public observer: AppObservableService,
+    private suiService: SuiService,
   ) {}
 
   @ViewChild('items') listSidenav: MatSelectionList;
@@ -35,11 +37,33 @@ export class SidenavMenuComponent {
 
   ngOnInit() {
     this.x = window.matchMedia('(max-width: 800px)'); // Si hace match con dispositivos móviles
-    // this.listSidenav.deselectAll();
     localStorage.removeItem('servicio');
     localStorage.removeItem('periodo');
     localStorage.removeItem('capas');
     localStorage.removeItem('empresa');
+    this.loadVisitors();
+    this.createVisitors();
+  }
+  
+  createVisitors() {
+    this.suiService.setVisita({id_usuario: 1, observacion: "Sin observación"}).subscribe( visitas => {
+      // console.log(visitas);
+      this.loadVisitors();
+    }, (error: ISUIError) => {
+      // console.log(error);
+      this.observer.setShowAlertErrorSUI(error.status);
+    });
+  }
+  
+  loadVisitors() {
+    this.suiService.getVisitas().subscribe( visitas => {
+      let result: any = visitas;
+      // console.log(result);
+      this.options[10].select = result.total;
+    }, (error: ISUIError) => {
+      // console.log(error);
+      this.observer.setShowAlertErrorSUI(error.status);
+    });
   }
 
   close(reason: string) {}
@@ -70,6 +94,8 @@ export class SidenavMenuComponent {
       this.options[8].icon = 'nightlight_round';
       this.listSidenav.deselectAll();
       this.observer.setChangeBasemap('oscuro');
+    } else if (option.name === 'Visitas') {
+      this.listSidenav.deselectAll();
     } else {
       return;
     }

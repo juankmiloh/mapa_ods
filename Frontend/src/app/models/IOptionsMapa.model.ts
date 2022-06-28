@@ -84,4 +84,9 @@ export const modelEmpresa = {
   depto: {cod: 'TODOS', nombre: 'TODOS'},
   mpio: {cod: 'TODOS', nombre: 'TODOS'},
   cpoblado: {cod: 'TODOS', nombre: 'TODOS'},
-};
+}
+
+export interface Visitas {
+  items: [];
+  total: number;
+}
