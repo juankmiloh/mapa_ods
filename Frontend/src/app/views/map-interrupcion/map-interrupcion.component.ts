@@ -529,7 +529,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
         url: urlOptions,
         // title: `Interrupciones ${options.colSui} ${this.meses[options.mes]} de ${options.ano}`,
         title: `Intensidad de consumo`,
-        copyright: 'DESARROLLADO POR JUAN CAMILO HERRERA - SUPERSERVICIOS',
+        copyright: 'DESARROLLADO POR SUPERSERVICIOS',
         popupTemplate: template,
         renderer,
       });
@@ -622,7 +622,7 @@ export class MapInterrupcionComponent implements OnInit, OnDestroy {
         url: urlOptions,
         // title: `Interrupciones ${options.colSui} ${this.meses[options.mes]} de ${options.ano}`,
         title: `Intensidad estratificación`,
-        copyright: 'DESARROLLADO POR JUAN CAMILO HERRERA - SUPERSERVICIOS',
+        copyright: 'DESARROLLADO POR SUPERSERVICIOS',
         popupTemplate: template,
         renderer,
       });
