@@ -68,8 +68,8 @@ export const LIST_SIDENAV = [
     {
         name: 'divider',
     },
-    {
-        name: 'Acerca de SSPD - ODS',
-        icon: 'help_outline',
-    },
+    // {
+    //     name: 'Acerca de SSPD - ODS',
+    //     icon: 'help_outline',
+    // },
 ];
