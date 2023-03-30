@@ -1,0 +1,16 @@
+cd C:\Users\ebayona\Documents\GitHub\mapa_ods\Backend
+
+cd C:\Users\ebayona\Documents\GitHub\mapa_ods\Backend
+
+.venv\scripts\activate
+pip install -r requirements.txt
+
+flask run -h 172.16.2.190 -p 5000 --cert=superservicios.gov.co.crt --key=superservicios.key
+%Abcs011549123.%
+
+
+C:\Users\ebayona\Documents\GitHub\mapa_interrupciones\Backend
+flask run -h 172.16.2.190 -p 5050
+flask run -h 172.16.2.190 -p 5050
+
+AZURE_SUI:C0l0mb1a_Nov2020
