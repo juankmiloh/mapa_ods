@@ -3,11 +3,10 @@ Flask-cors>=3.0.7
 Flask-Script>=2.0.6
 Flask-Injector>=0.12.0
 Flask-SQLAlchemy>=2.3.2
-pandas>=0.24.1
+psycopg2-binary
 pyPika>=0.34.0
 Werkzeug==1.0.1
-cx_Oracle
-psycopg2-binary
 jinja2<3.1.0
-itsdangerous==2.0.1 # Cuando moleste la version de flask descomentar
-pyopenssl
+itsdangerous==2.0.1
+SQLAlchemy==1.4.42
+cx_Oracle
